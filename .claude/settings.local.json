@@ -27,7 +27,10 @@
       "Bash(curl:*)",
       "Bash(git commit:*)",
       "Bash(gh run list:*)",
-      "Bash(gh auth:*)"
+      "Bash(gh auth:*)",
+      "Bash(unset GITHUB_TOKEN)",
+      "Bash(gh run view:*)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }

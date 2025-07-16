@@ -29,6 +29,8 @@ public class ViceToolsAddressParsingTests
         // Arrange
         var expectedBytes = new byte[] { 0xAA, 0xBB };
         var buffer = BufferManager.GetBuffer((uint)expectedBytes.Length);
+        // Clear the buffer first to ensure no residual data
+        Array.Clear(buffer.Data, 0, buffer.Data.Length);
         Array.Copy(expectedBytes, buffer.Data, expectedBytes.Length);
         
         var memoryResponse = new MemoryGetResponse(0x02, ErrorCode.OK, buffer);
