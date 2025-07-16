@@ -6,7 +6,7 @@
 [![Platform](https://img.shields.io/badge/Platform-Linux%20|%20macOS%20|%20Windows-blue.svg)](https://github.com/barryw/ViceMCP)
 [![License](https://img.shields.io/badge/License-MIT-brightgreen.svg)](LICENSE)
 [![Latest Release](https://img.shields.io/github/v/release/barryw/ViceMCP)](https://github.com/barryw/ViceMCP/releases/latest)
-[![CI/CD](https://github.com/barryw/ViceMCP/actions/workflows/ci.yml/badge.svg)](https://github.com/barryw/ViceMCP/actions)
+[![CI/CD](https://github.com/barryw/ViceMCP/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/barryw/ViceMCP/actions/workflows/ci-cd.yml)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-orange.svg)](https://modelcontextprotocol.io/)
 
 **AI-Powered Commodore Development Bridge**
