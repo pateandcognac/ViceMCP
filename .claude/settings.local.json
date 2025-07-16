@@ -35,7 +35,12 @@
       "Bash(gh release list:*)",
       "Bash(gh release view:*)",
       "Bash(git fetch:*)",
-      "Bash(gh workflow run:*)"
+      "Bash(gh workflow run:*)",
+      "Bash(gh workflow view:*)",
+      "Bash(gh api:*)",
+      "Bash(echo:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(yamllint:*)"
     ],
     "deny": []
   }
