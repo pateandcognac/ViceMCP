@@ -224,7 +224,7 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
-        context: ./ViceMCP
+        context: .
         file: ./ViceMCP/Dockerfile
         push: true
         tags: |

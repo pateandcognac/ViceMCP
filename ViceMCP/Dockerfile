@@ -1,13 +1,23 @@
-﻿FROM mcr.microsoft.com/dotnet/runtime:9.0 AS base
-USER $APP_UID
+FROM mcr.microsoft.com/dotnet/runtime:9.0 AS base
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+
+# Copy solution and project files
+COPY ["ViceMCP.sln", "./"]
 COPY ["ViceMCP/ViceMCP.csproj", "ViceMCP/"]
+COPY ["ViceMCP.Tests/ViceMCP.Tests.csproj", "ViceMCP.Tests/"]
+COPY ["vice-bridge-net/source/ViceMonitor.Bridge/Righthand.ViceMonitor.Bridge/Righthand.ViceMonitor.Bridge.csproj", "vice-bridge-net/source/ViceMonitor.Bridge/Righthand.ViceMonitor.Bridge/"]
+
+# Restore dependencies
 RUN dotnet restore "ViceMCP/ViceMCP.csproj"
+
+# Copy everything else
 COPY . .
+
+# Build the application
 WORKDIR "/src/ViceMCP"
 RUN dotnet build "./ViceMCP.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
