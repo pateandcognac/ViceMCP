@@ -1,131 +1,163 @@
 # GitHub Workflows Guide
 
-This repository uses several GitHub Actions workflows for CI/CD and release automation.
+This repository uses a unified CI/CD pipeline based on the LuaKit project's architecture.
 
-## Workflows Overview
+## Main Workflow: `ci-cd.yml`
 
-### 1. CI Pipeline (`ci.yml`)
-- **Trigger**: Push to main/develop, pull requests
-- **Purpose**: Build, test, and validate code across multiple platforms
-- **Jobs**:
-  - Build & Test (Ubuntu, Windows, macOS)
-  - Code Quality checks
-  - Security scanning
-  - Dependency vulnerability checks
-  - Docker build validation
-  - Code coverage reporting
+A comprehensive multi-stage pipeline that handles everything from building and testing to automatic releases.
 
-### 2. Release Pipeline (`release.yml`)
-- **Trigger**: Git tags (v*) or manual dispatch
-- **Purpose**: Build and publish release artifacts
-- **Outputs**:
-  - Self-contained binaries for Linux, Windows, macOS (x64 and ARM64)
-  - Docker images published to GitHub Container Registry
-  - GitHub Release with artifacts
+### Pipeline Stages
 
-### 3. Auto Version (`auto-version.yml`)
-- **Trigger**: Push to main (excluding docs and config changes)
-- **Purpose**: Automatic semantic versioning based on conventional commits
+#### 1. Build & Test
+- **Triggers**: Push to main/develop, pull requests
+- **Platforms**: Ubuntu, Windows, macOS
+- **Actions**:
+  - Builds the project with .NET 9.0 (with 8.0 fallback)
+  - Runs comprehensive test suite with coverage
+  - Uploads test results and coverage reports
+  - Integrates with Codecov for coverage tracking
+
+#### 2. Code Quality
+- **Purpose**: Ensure code standards and consistency
+- **Checks**:
+  - Code formatting verification
+  - Static code analysis
+  - Warning detection
+  - Code style enforcement
+
+#### 3. Security Scan
+- **Tool**: Trivy vulnerability scanner
+- **Scans**: Dependencies and code for security issues
+- **Reports**: SARIF format uploaded to GitHub Security tab
+
+#### 4. Docker Validation
+- **Purpose**: Ensure Docker images build correctly
+- **Runs**: On pushes and non-draft PRs
+
+#### 5. Auto Release
+- **Triggers**: Pushes to main branch after successful tests
 - **Features**:
-  - Analyzes commit messages (feat: → minor, fix: → patch, BREAKING: → major)
-  - Creates git tags
-  - Generates release notes
-  - Creates GitHub releases
+  - AI-powered version analysis using Claude Haiku
+  - Automatic semantic versioning
+  - Intelligent release note generation
+  - No release for docs/tests/CI-only changes
 
-### 4. Manual Release (`manual-release.yml`)
-- **Trigger**: Manual workflow dispatch
-- **Purpose**: Create releases with manual version control
-- **Options**:
-  - Choose version bump type (patch/minor/major)
-  - Add custom release notes
-  - Updates version in project files
+#### 6. Build Release Artifacts
+- **Triggers**: When auto-release creates a new version
+- **Platforms**: Linux (x64/ARM64), Windows (x64), macOS (x64/ARM64)
+- **Output**: Self-contained, trimmed single-file executables
 
-### 5. Advanced Versioning (`versioning.yml`)
-- **Trigger**: After successful CI run on main
-- **Purpose**: AI-powered version analysis using Claude Haiku
-- **Requirements**: `ANTHROPIC_API_KEY` secret
-- **Features**:
-  - Intelligent commit analysis
-  - Detailed release notes generation
-  - Automatic version determination
+#### 7. Docker Release
+- **Builds**: Multi-architecture Docker images
+- **Registries**: GitHub Container Registry and Docker Hub
+- **Architectures**: linux/amd64, linux/arm64
 
-### 6. PR Validation (`pr-validation.yml`)
-- **Trigger**: Pull request events
-- **Purpose**: Validate PR quality
-- **Features**:
-  - Semantic PR title enforcement
-  - Automatic labeling
-  - Size labeling
-  - First-time contributor welcome
+#### 8. Notifications
+- **Optional**: Slack webhook integration
+- **Reports**: Release status and version information
 
-### 7. Dependabot Integration (`dependabot.yml`)
-- **Trigger**: Dependabot pull requests
-- **Purpose**: Auto-merge safe dependency updates
-- **Features**:
-  - Auto-merge minor/patch updates
-  - Manual review for major updates
+### Supporting Workflows
 
-## Setup Requirements
+#### `pr-validation.yml`
+- Validates PR titles follow conventional commits
+- Auto-labels PRs by size and type
+- Welcomes first-time contributors
+
+#### `dependabot.yml`
+- Auto-merges minor/patch dependency updates
+- Requires manual review for major updates
+
+## Configuration
 
 ### Required Secrets
-- `ANTHROPIC_API_KEY` (optional): For AI-powered versioning
-- `DOCKER_USERNAME` (optional): For Docker Hub publishing
+- `ANTHROPIC_API_KEY` (optional): Enables AI-powered versioning and release notes
 - `DOCKER_PASSWORD` (optional): For Docker Hub publishing
 
-### Automatic Secrets
-- `GITHUB_TOKEN`: Automatically provided by GitHub Actions
+### Optional Variables
+- `DOCKER_USERNAME`: Docker Hub username
+- `SLACK_WEBHOOK_URL`: For release notifications
 
 ## Version Management
 
-### Conventional Commits
-The auto-versioning system follows [Conventional Commits](https://www.conventionalcommits.org/):
+The pipeline uses conventional commits for automatic versioning:
 
-- `feat:` - New features (triggers MINOR bump)
-- `fix:` - Bug fixes (triggers PATCH bump)
-- `docs:` - Documentation changes (PATCH)
-- `chore:`, `ci:`, `test:`, `refactor:` - Maintenance (PATCH)
-- `BREAKING CHANGE:` or `!` - Breaking changes (triggers MAJOR bump)
+- `feat:` → Minor version bump (0.1.0 → 0.2.0)
+- `fix:` → Patch version bump (0.1.0 → 0.1.1)
+- `feat!:` or `BREAKING CHANGE:` → Major version bump (0.1.0 → 1.0.0)
+- `docs:`, `chore:`, `ci:`, `test:` → No release unless code changes
 
 ### Examples
 ```bash
-# Minor version bump (0.1.0 → 0.2.0)
+# New feature (minor bump)
 git commit -m "feat: add new memory search command"
 
-# Patch version bump (0.1.0 → 0.1.1)
+# Bug fix (patch bump)
 git commit -m "fix: resolve buffer overflow in memory operations"
 
-# Major version bump (0.1.0 → 1.0.0)
+# Breaking change (major bump)
 git commit -m "feat!: change API response format
 
 BREAKING CHANGE: API responses now use different field names"
 ```
 
-## Manual Release Process
+## Scripts
 
-1. Go to Actions → Manual Release
-2. Click "Run workflow"
-3. Select version bump type
-4. Optionally add release notes
-5. Click "Run workflow"
+The workflow uses Node.js scripts in `.github/scripts/`:
 
-The workflow will:
-- Calculate new version
-- Update project files
-- Create git tag
-- Generate release notes
-- Create GitHub release
-- Trigger artifact builds
+### `analyze-version.js`
+- Analyzes commits since last tag
+- Determines version bump type
+- Decides if release is needed
+- Falls back to conventional commit parsing if AI unavailable
+
+### `generate-release-notes.js`
+- Creates professional release notes
+- Groups changes by category
+- Includes test results and statistics
+- Uses AI for natural language generation
+
+## Manual Workflows
+
+To manually trigger workflows:
+
+1. Go to Actions tab
+2. Select the workflow
+3. Click "Run workflow"
+4. Fill in required parameters
 
 ## Skipping CI
 
-Add `[skip ci]` to commit messages to skip CI runs:
+Add `[skip ci]` to commit messages to skip the pipeline:
 ```bash
 git commit -m "docs: update README [skip ci]"
 ```
 
-## Workflow Permissions
+## Best Practices
 
-Ensure your repository has the following settings:
-- Settings → Actions → General → Workflow permissions
-- Select "Read and write permissions"
-- Check "Allow GitHub Actions to create and approve pull requests"
+1. **Commit Messages**: Follow conventional commits for automatic versioning
+2. **PRs**: Use descriptive titles that match commit conventions
+3. **Testing**: Ensure tests pass locally before pushing
+4. **Dependencies**: Keep dependencies up to date with Dependabot
+5. **Security**: Address security alerts promptly
+
+## Troubleshooting
+
+### Pipeline Failures
+1. Check the Actions tab for detailed logs
+2. Click on failed jobs to see specific errors
+3. Most common issues:
+   - Test failures
+   - Linting errors
+   - Missing dependencies
+
+### Release Issues
+1. Verify ANTHROPIC_API_KEY is set if using AI features
+2. Check commit messages follow conventions
+3. Ensure main branch protection rules allow bot commits
+
+### Docker Issues
+1. Verify Docker credentials are set correctly
+2. Check Dockerfile syntax
+3. Ensure base images are available
+
+For more help, check the [GitHub Actions documentation](https://docs.github.com/actions).

@@ -1,0 +1,15 @@
+{
+  "name": "vicemcp-ci-scripts",
+  "version": "1.0.0",
+  "description": "CI/CD scripts for ViceMCP",
+  "private": true,
+  "scripts": {
+    "analyze-version": "node analyze-version.js",
+    "generate-release-notes": "node generate-release-notes.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

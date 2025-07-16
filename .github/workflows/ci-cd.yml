@@ -1,0 +1,433 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            rid: linux-x64
+          - os: windows-latest
+            rid: win-x64
+          - os: macos-latest
+            rid: osx-x64
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: recursive
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: |
+          8.0.x
+          9.0.x
+
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.NUGET_PACKAGES }}
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Test with coverage
+      run: |
+        dotnet test --configuration Release --no-build --verbosity normal \
+          --logger trx --collect:"XPlat Code Coverage" \
+          --results-directory ./TestResults
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results-${{ matrix.os }}
+        path: TestResults/**/*
+        retention-days: 7
+
+    - name: Generate coverage report
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        dotnet tool install -g dotnet-reportgenerator-globaltool
+        reportgenerator -reports:TestResults/**/coverage.cobertura.xml \
+          -targetdir:coverage -reporttypes:Html;Cobertura;MarkdownSummaryGithub
+
+    - name: Upload coverage to Codecov
+      if: matrix.os == 'ubuntu-latest'
+      uses: codecov/codecov-action@v4
+      with:
+        files: ./coverage/Cobertura.xml
+        flags: unittests
+        name: codecov-vicemcp
+        fail_ci_if_error: false
+
+    - name: Write coverage to job summary
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        cat coverage/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
+
+  lint-and-format:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Check formatting
+      run: |
+        dotnet format --verify-no-changes --verbosity diagnostic || {
+          echo "::warning::Code formatting issues detected. Run 'dotnet format' to fix."
+          exit 0
+        }
+
+    - name: Run code analysis
+      run: |
+        dotnet build --configuration Release --no-restore \
+          -warnaserror -p:TreatWarningsAsErrors=false \
+          -p:EnforceCodeStyleInBuild=true
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        severity: 'CRITICAL,HIGH,MEDIUM'
+
+    - name: Upload Trivy scan results
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+    - name: Check for vulnerable dependencies
+      run: |
+        dotnet list package --vulnerable --include-transitive || true
+
+  docker-validation:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event.pull_request.draft == false
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./ViceMCP/Dockerfile
+        push: false
+        tags: vicemcp:test
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  auto-release:
+    name: Auto Release
+    needs: [build-and-test, lint-and-format, security-scan]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    outputs:
+      new_version: ${{ steps.version.outputs.new_version }}
+      should_release: ${{ steps.version.outputs.should_release }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install script dependencies
+      run: |
+        cd .github/scripts
+        npm install
+
+    - name: Analyze version
+      id: version
+      env:
+        ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        node .github/scripts/analyze-version.js
+
+    - name: Update version in project files
+      if: steps.version.outputs.should_release == 'true'
+      run: |
+        VERSION="${{ steps.version.outputs.new_version }}"
+        VERSION_NUM="${VERSION#v}"
+        
+        # Update .csproj files
+        find . -name "*.csproj" -type f -exec sed -i "s|<Version>.*</Version>|<Version>$VERSION_NUM</Version>|g" {} \;
+        find . -name "*.csproj" -type f -exec sed -i "s|<AssemblyVersion>.*</AssemblyVersion>|<AssemblyVersion>$VERSION_NUM</AssemblyVersion>|g" {} \;
+        find . -name "*.csproj" -type f -exec sed -i "s|<FileVersion>.*</FileVersion>|<FileVersion>$VERSION_NUM</FileVersion>|g" {} \;
+
+    - name: Generate release notes
+      if: steps.version.outputs.should_release == 'true'
+      id: notes
+      env:
+        ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        node .github/scripts/generate-release-notes.js "${{ steps.version.outputs.new_version }}"
+
+    - name: Create release commit
+      if: steps.version.outputs.should_release == 'true'
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        
+        if [[ -n $(git status -s) ]]; then
+          git add -A
+          git commit -m "chore: bump version to ${{ steps.version.outputs.new_version }}
+
+[skip ci]"
+          git push
+        fi
+
+    - name: Create tag and release
+      if: steps.version.outputs.should_release == 'true'
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Create tag
+        git tag -a "${{ steps.version.outputs.new_version }}" -m "Release ${{ steps.version.outputs.new_version }}"
+        git push origin "${{ steps.version.outputs.new_version }}"
+        
+        # Create release
+        gh release create "${{ steps.version.outputs.new_version }}" \
+          --title "Release ${{ steps.version.outputs.new_version }}" \
+          --notes-file release-notes.md \
+          --latest
+
+  build-release-artifacts:
+    name: Build Release Artifacts
+    needs: auto-release
+    if: needs.auto-release.outputs.should_release == 'true'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            rid: linux-x64
+            artifact: vicemcp-linux-x64
+          - os: ubuntu-latest
+            rid: linux-arm64
+            artifact: vicemcp-linux-arm64
+          - os: windows-latest
+            rid: win-x64
+            artifact: vicemcp-windows-x64
+          - os: macos-latest
+            rid: osx-x64
+            artifact: vicemcp-macos-x64
+          - os: macos-latest
+            rid: osx-arm64
+            artifact: vicemcp-macos-arm64
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ needs.auto-release.outputs.new_version }}
+        submodules: recursive
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Publish self-contained binary
+      run: |
+        dotnet publish ViceMCP/ViceMCP.csproj \
+          --configuration Release \
+          --runtime ${{ matrix.rid }} \
+          --self-contained true \
+          -p:PublishSingleFile=true \
+          -p:PublishTrimmed=true \
+          -p:TrimMode=partial \
+          -p:EnableCompressionInSingleFile=true \
+          --output ./publish
+
+    - name: Package artifact
+      shell: bash
+      run: |
+        cd publish
+        if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+          7z a ../${{ matrix.artifact }}.zip *
+        else
+          tar -czf ../${{ matrix.artifact }}.tar.gz *
+        fi
+
+    - name: Upload release artifact
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+          gh release upload "${{ needs.auto-release.outputs.new_version }}" \
+            "${{ matrix.artifact }}.zip" --clobber
+        else
+          gh release upload "${{ needs.auto-release.outputs.new_version }}" \
+            "${{ matrix.artifact }}.tar.gz" --clobber
+        fi
+
+  docker-release:
+    name: Docker Release
+    needs: auto-release
+    if: needs.auto-release.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ needs.auto-release.outputs.new_version }}
+        submodules: recursive
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Log in to Docker Hub
+      if: vars.DOCKER_USERNAME != ''
+      uses: docker/login-action@v3
+      with:
+        username: ${{ vars.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: |
+          ghcr.io/${{ github.repository }}
+          ${{ vars.DOCKER_USERNAME && format('{0}/vicemcp', vars.DOCKER_USERNAME) || '' }}
+        tags: |
+          type=ref,event=tag
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./ViceMCP/Dockerfile
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  notify:
+    name: Notify
+    needs: [build-release-artifacts, docker-release]
+    if: always()
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Send notification
+      if: vars.SLACK_WEBHOOK_URL != ''
+      env:
+        SLACK_WEBHOOK_URL: ${{ vars.SLACK_WEBHOOK_URL }}
+      run: |
+        STATUS="${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}"
+        COLOR="${{ contains(needs.*.result, 'failure') && '#dc3545' || '#28a745' }}"
+        EMOJI="${{ contains(needs.*.result, 'failure') && ':x:' || ':white_check_mark:' }}"
+        
+        curl -X POST $SLACK_WEBHOOK_URL \
+          -H 'Content-Type: application/json' \
+          -d "{
+            \"attachments\": [{
+              \"color\": \"$COLOR\",
+              \"title\": \"$EMOJI ViceMCP Release ${{ needs.auto-release.outputs.new_version }}\",
+              \"text\": \"Release workflow completed with status: $STATUS\",
+              \"fields\": [
+                {
+                  \"title\": \"Repository\",
+                  \"value\": \"${{ github.repository }}\",
+                  \"short\": true
+                },
+                {
+                  \"title\": \"Version\",
+                  \"value\": \"${{ needs.auto-release.outputs.new_version }}\",
+                  \"short\": true
+                }
+              ],
+              \"footer\": \"GitHub Actions\",
+              \"ts\": $(date +%s)
+            }]
+          }"
