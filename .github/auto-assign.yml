@@ -1,0 +1,23 @@
+# Set to true to add reviewers to pull requests
+addReviewers: true
+
+# Set to true to add assignees to pull requests
+addAssignees: false
+
+# A list of reviewers to be added to pull requests (GitHub user name)
+reviewers:
+  - yourusername  # Replace with actual username
+
+# A number of reviewers added to the pull request
+# Set 0 to add all the reviewers (default: 0)
+numberOfReviewers: 0
+
+# A list of keywords to skip the auto assignment
+skipKeywords:
+  - wip
+  - draft
+
+# A list of users to never assign (GitHub user name)
+skipUsers:
+  - dependabot[bot]
+  - renovate[bot]

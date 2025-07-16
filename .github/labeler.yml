@@ -1,0 +1,59 @@
+# Add 'source' label to any change to source files
+source:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'ViceMCP/**/*.cs'
+      - '!ViceMCP.Tests/**/*'
+
+# Add 'test' label to any change to test files
+test:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'ViceMCP.Tests/**/*'
+      - '**/*Test.cs'
+      - '**/*Tests.cs'
+
+# Add 'documentation' label to any change to documentation
+documentation:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.md'
+      - 'docs/**/*'
+
+# Add 'docker' label to any change to Docker files
+docker:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/Dockerfile'
+      - 'compose.yaml'
+      - 'docker-compose.yml'
+      - '.dockerignore'
+
+# Add 'ci' label to any change to CI files
+ci:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/workflows/**/*'
+      - '.github/actions/**/*'
+
+# Add 'dependencies' label to any change to dependency files
+dependencies:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.csproj'
+      - '**/packages.config'
+      - '.github/dependabot.yml'
+
+# Add 'mcp' label to any change to MCP-related files
+mcp:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/ViceTools.cs'
+      - '**/Program.cs'
+
+# Add 'vice' label to any change to VICE-related files
+vice:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/ViceBridge*.cs'
+      - '**/ViceConfiguration.cs'

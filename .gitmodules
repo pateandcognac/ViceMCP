@@ -1,0 +1,3 @@
+[submodule "vice-bridge-net"]
+	path = vice-bridge-net
+	url = https://github.com/MihaMarkic/vice-bridge-net.git
