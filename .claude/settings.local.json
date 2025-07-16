@@ -25,7 +25,9 @@
       "Bash(git push:*)",
       "WebFetch(domain:github.com)",
       "Bash(curl:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh auth:*)"
     ],
     "deny": []
   }

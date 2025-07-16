@@ -206,6 +206,9 @@ jobs:
           8.0.x
           9.0.x
 
+    - name: Restore dependencies
+      run: dotnet restore
+
     - name: Check for outdated packages
       run: |
         dotnet list package --outdated
