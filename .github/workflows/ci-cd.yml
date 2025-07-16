@@ -86,10 +86,12 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       uses: codecov/codecov-action@v4
       with:
+        token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage/Cobertura.xml
         flags: unittests
         name: codecov-vicemcp
         fail_ci_if_error: false
+        verbose: true
 
     - name: Write coverage to job summary
       if: matrix.os == 'ubuntu-latest'

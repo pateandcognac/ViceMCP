@@ -78,6 +78,7 @@ A comprehensive multi-stage pipeline that handles everything from building and t
 ### Required Secrets
 - `ANTHROPIC_API_KEY` (optional): Enables AI-powered versioning and release notes
 - `DOCKER_PASSWORD` (optional): For Docker Hub publishing
+- `CODECOV_TOKEN` (recommended): For reliable Codecov integration
 
 ### Optional Variables
 - `DOCKER_USERNAME`: Docker Hub username

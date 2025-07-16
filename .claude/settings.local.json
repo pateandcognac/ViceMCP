@@ -40,7 +40,9 @@
       "Bash(gh api:*)",
       "Bash(echo:*)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "Bash(yamllint:*)"
+      "Bash(yamllint:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)"
     ],
     "deny": []
   }

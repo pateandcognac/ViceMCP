@@ -7,6 +7,7 @@
 [![License](https://img.shields.io/badge/License-MIT-brightgreen.svg)](LICENSE)
 [![Latest Release](https://img.shields.io/github/v/release/barryw/ViceMCP)](https://github.com/barryw/ViceMCP/releases/latest)
 [![CI/CD](https://github.com/barryw/ViceMCP/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/barryw/ViceMCP/actions/workflows/ci-cd.yml)
+[![Coverage](https://codecov.io/gh/barryw/ViceMCP/branch/main/graph/badge.svg)](https://codecov.io/gh/barryw/ViceMCP)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-orange.svg)](https://modelcontextprotocol.io/)
 
 **AI-Powered Commodore Development Bridge**
