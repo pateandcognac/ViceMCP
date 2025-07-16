@@ -10,7 +10,7 @@ A comprehensive multi-stage pipeline that handles everything from building and t
 
 #### 1. Build & Test
 - **Triggers**: Push to main/develop, pull requests
-- **Platforms**: Ubuntu, Windows, macOS
+- **Primary Platform**: Ubuntu (fast CI feedback)
 - **Actions**:
   - Builds the project with .NET 9.0 (with 8.0 fallback)
   - Runs comprehensive test suite with coverage
@@ -34,7 +34,13 @@ A comprehensive multi-stage pipeline that handles everything from building and t
 - **Purpose**: Ensure Docker images build correctly
 - **Runs**: On pushes and non-draft PRs
 
-#### 5. Auto Release
+#### 5. Platform Validation
+- **Purpose**: Ensure cross-platform compatibility
+- **Platforms**: Windows, macOS
+- **Triggers**: Main branch pushes and manual workflow dispatch
+- **Note**: Runs less frequently to optimize CI time while still ensuring compatibility
+
+#### 6. Auto Release
 - **Triggers**: Pushes to main branch after successful tests
 - **Features**:
   - AI-powered version analysis using Claude Haiku
@@ -42,17 +48,17 @@ A comprehensive multi-stage pipeline that handles everything from building and t
   - Intelligent release note generation
   - No release for docs/tests/CI-only changes
 
-#### 6. Build Release Artifacts
+#### 7. Build Release Artifacts
 - **Triggers**: When auto-release creates a new version
 - **Platforms**: Linux (x64/ARM64), Windows (x64), macOS (x64/ARM64)
 - **Output**: Self-contained, trimmed single-file executables
 
-#### 7. Docker Release
+#### 8. Docker Release
 - **Builds**: Multi-architecture Docker images
 - **Registries**: GitHub Container Registry and Docker Hub
 - **Architectures**: linux/amd64, linux/arm64
 
-#### 8. Notifications
+#### 9. Notifications
 - **Optional**: Slack webhook integration
 - **Reports**: Release status and version information
 

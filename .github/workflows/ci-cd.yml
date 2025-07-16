@@ -30,14 +30,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest]
         include:
           - os: ubuntu-latest
             rid: linux-x64
-          - os: windows-latest
-            rid: win-x64
-          - os: macos-latest
-            rid: osx-x64
     
     steps:
     - name: Checkout code
@@ -187,6 +183,37 @@ jobs:
         tags: vicemcp:test
         cache-from: type=gha
         cache-to: type=gha,mode=max
+
+  platform-validation:
+    name: Platform Validation
+    runs-on: ${{ matrix.os }}
+    # Only run on main branch pushes or manual trigger
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: |
+          8.0.x
+          9.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test --configuration Release --no-build --verbosity normal
 
   auto-release:
     name: Auto Release
