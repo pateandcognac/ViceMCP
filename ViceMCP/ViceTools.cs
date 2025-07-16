@@ -83,7 +83,7 @@ public class ViceTools
         Array.Copy(data, buffer.Data, data.Length);
         
         var command = new MemorySetCommand(0, start, MemSpace.MainMemory, 0, buffer);
-        var enqueued = _viceBridge.EnqueueCommand(command);
+        var enqueued = _viceBridge.EnqueueCommand(command, resumeOnStopped: true);
         var result = await enqueued.Response;
         
         if (!result.IsSuccess)
@@ -166,7 +166,7 @@ public class ViceTools
         
         var items = ImmutableArray.Create(new RegisterItem(registerId, value));
         var command = new RegistersSetCommand(MemSpace.MainMemory, items);
-        var enqueued = _viceBridge.EnqueueCommand(command);
+        var enqueued = _viceBridge.EnqueueCommand(command, resumeOnStopped: true);
         var result = await enqueued.Response;
         
         if (!result.IsSuccess)
@@ -562,7 +562,7 @@ public class ViceTools
         Array.Copy(sourceBuffer.Data, 0, destBuffer.Data, 0, length);
         
         var writeCommand = new MemorySetCommand(0, dest, MemSpace.MainMemory, 0, destBuffer);
-        var writeResult = await _viceBridge.EnqueueCommand(writeCommand).Response;
+        var writeResult = await _viceBridge.EnqueueCommand(writeCommand, resumeOnStopped: true).Response;
         
         if (!writeResult.IsSuccess)
         {
@@ -614,7 +614,7 @@ public class ViceTools
         }
         
         var command = new MemorySetCommand(0, start, MemSpace.MainMemory, 0, buffer);
-        var result = await _viceBridge.EnqueueCommand(command).Response;
+        var result = await _viceBridge.EnqueueCommand(command, resumeOnStopped: true).Response;
         
         if (!result.IsSuccess)
         {
@@ -845,7 +845,7 @@ public class ViceTools
         
         // Write to memory
         var command = new MemorySetCommand(0, loadAddress, MemSpace.MainMemory, 0, buffer);
-        var result = await _viceBridge.EnqueueCommand(command).Response;
+        var result = await _viceBridge.EnqueueCommand(command, resumeOnStopped: true).Response;
         
         if (!result.IsSuccess)
         {
