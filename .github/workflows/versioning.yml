@@ -147,14 +147,15 @@ jobs:
     - name: Update version in project files
       run: |
         # Update version in .csproj files (remove 'v' prefix)
-        VERSION_NUM="${{{ steps.new_version.outputs.version }}#v}"
+        VERSION="${{ steps.new_version.outputs.version }}"
+        VERSION_NUM="${VERSION#v}"
         find . -name "*.csproj" -type f -exec sed -i "s|<Version>.*</Version>|<Version>$VERSION_NUM</Version>|g" {} \;
         find . -name "*.csproj" -type f -exec sed -i "s|<AssemblyVersion>.*</AssemblyVersion>|<AssemblyVersion>$VERSION_NUM</AssemblyVersion>|g" {} \;
         find . -name "*.csproj" -type f -exec sed -i "s|<FileVersion>.*</FileVersion>|<FileVersion>$VERSION_NUM</FileVersion>|g" {} \;
         find . -name "*.csproj" -type f -exec sed -i "s|<PackageVersion>.*</PackageVersion>|<PackageVersion>$VERSION_NUM</PackageVersion>|g" {} \;
         
         # Update version in any AssemblyInfo files
-        find . -name "AssemblyInfo.cs" -type f -exec sed -i 's/AssemblyVersion(".*")/AssemblyVersion("${{ steps.new_version.outputs.version }}")/g' {} \;
+        find . -name "AssemblyInfo.cs" -type f -exec sed -i "s/AssemblyVersion(\".*\")/AssemblyVersion(\"$VERSION_NUM\")/g" {} \;
 
     - name: Create release commit
       run: |
