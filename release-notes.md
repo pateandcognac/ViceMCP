@@ -1,26 +1,20 @@
-# ViceMCP v0.5.0 Release Notes
+# ViceMCP v0.5.1 Release Notes
 
-This release introduces a number of new features and improvements to the ViceMCP .NET library, which provides tools for interfacing with the VICE Commodore emulator. Key highlights include support for additional MCP commands, bug fixes, and performance optimizations.
+This release includes a few minor bug fixes and improvements to the ViceMCP library, a .NET tool for interfacing with the VICE Commodore emulator.
 
-## 🚀 Features
+## Bug Fixes
 
-- 🆕 Added support for the `get_screenshot` MCP command to capture emulator screenshots
-- 🆕 Implemented the `set_power_state` MCP command to control the power state of the emulated system
-- 🆕 Exposed new `ScreenshotFormat` enum to specify the image format for captured screenshots
+🐛 Fixed an issue where the emulator would sometimes fail to start on certain systems.
+🐛 Resolved a problem that could cause data corruption when transferring large files.
 
-## 🐛 Bug Fixes
+## Improvements
 
-- 🔧 Resolved an issue where the `get_tape_status` MCP command was not correctly parsing the response
-- 🔧 Fixed a bug that could cause the emulator to become unresponsive under certain conditions
+🚀 Optimized memory usage to improve overall performance.
+🔍 Enhanced error handling and logging for a better debugging experience.
 
-## 🧠 Improvements
+## Dependency Updates
 
-- ⚡️ Optimized the handling of MCP command responses for improved performance
-- 🔍 Enhanced error reporting to provide more detailed information when MCP commands fail
+- Updated to .NET 9.0
+- Bumped VICE emulator dependency to v3.5.1
 
-## ⚠️ Breaking Changes
-
-- The `MachineState` enum has been renamed to `PowerState` to better reflect its purpose
-- The `get_tape_status` MCP command now returns a more detailed `TapeStatus` object instead of a simple boolean
-
-Please refer to the [ViceMCP documentation](https://github.com/example/vicemcp/docs) for more information on using the new features and handling breaking changes.
+No breaking changes in this release. Enjoy!
