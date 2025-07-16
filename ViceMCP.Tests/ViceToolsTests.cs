@@ -29,6 +29,7 @@ public class ViceToolsTests
         // Arrange
         var expectedBytes = new byte[] { 0x08, 0x05, 0x0C, 0x0C, 0x0F };
         var buffer = BufferManager.GetBuffer((uint)expectedBytes.Length);
+        Array.Clear(buffer.Data, 0, buffer.Data.Length);
         Array.Copy(expectedBytes, buffer.Data, expectedBytes.Length);
         
         var memoryResponse = new MemoryGetResponse(0x02, ErrorCode.OK, buffer);

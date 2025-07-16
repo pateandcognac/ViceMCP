@@ -28,6 +28,7 @@ public class ViceToolsDisplayTests
     {
         // Arrange
         var imageBuffer = BufferManager.GetBuffer(1024);
+        Array.Clear(imageBuffer.Data, 0, imageBuffer.Data.Length);
         var displayResponse = new DisplayGetResponse(0x02, ErrorCode.OK, 320, 200, 0, 0, 320, 200, 8, imageBuffer);
         var commandResponse = new CommandResponse<DisplayGetResponse>(displayResponse);
         
@@ -64,6 +65,7 @@ public class ViceToolsDisplayTests
     {
         // Arrange
         var imageBuffer = BufferManager.GetBuffer(2048);
+        Array.Clear(imageBuffer.Data, 0, imageBuffer.Data.Length);
         var displayResponse = new DisplayGetResponse(0x02, ErrorCode.OK, 320, 200, 0, 0, 320, 200, 8, imageBuffer);
         var commandResponse = new CommandResponse<DisplayGetResponse>(displayResponse);
         

@@ -167,6 +167,7 @@ public class ViceToolsAddressParsingTests
     {
         // Arrange
         var buffer = BufferManager.GetBuffer(1);
+        Array.Clear(buffer.Data, 0, buffer.Data.Length);
         buffer.Data[0] = 0x42;
         
         var memoryResponse = new MemoryGetResponse(0x02, ErrorCode.OK, buffer);

@@ -34,6 +34,7 @@ public class ViceToolsMemoryOperationsTests : IDisposable
         // Arrange
         var sourceData = new byte[] { 0xAA, 0xBB, 0xCC };
         var sourceBuffer = BufferManager.GetBuffer((uint)sourceData.Length);
+        Array.Clear(sourceBuffer.Data, 0, sourceBuffer.Data.Length);
         Array.Copy(sourceData, sourceBuffer.Data, sourceData.Length);
         
         var readResponse = new MemoryGetResponse(0x02, ErrorCode.OK, sourceBuffer);
@@ -176,6 +177,7 @@ public class ViceToolsMemoryOperationsTests : IDisposable
         // Arrange
         var memoryData = new byte[] { 0x00, 0x01, 0xA9, 0x00, 0x02, 0xA9, 0x00, 0x03 };
         var buffer = BufferManager.GetBuffer((uint)memoryData.Length);
+        Array.Clear(buffer.Data, 0, buffer.Data.Length);
         Array.Copy(memoryData, buffer.Data, memoryData.Length);
         
         var memoryResponse = new MemoryGetResponse(0x02, ErrorCode.OK, buffer);
@@ -211,6 +213,7 @@ public class ViceToolsMemoryOperationsTests : IDisposable
         // Arrange
         var memoryData = new byte[] { 0x00, 0x01, 0x02, 0x03 };
         var buffer = BufferManager.GetBuffer((uint)memoryData.Length);
+        Array.Clear(buffer.Data, 0, buffer.Data.Length);
         Array.Copy(memoryData, buffer.Data, memoryData.Length);
         
         var memoryResponse = new MemoryGetResponse(0x02, ErrorCode.OK, buffer);
@@ -261,6 +264,7 @@ public class ViceToolsMemoryOperationsTests : IDisposable
                 var data = responses.Dequeue();
                 
                 var buffer = BufferManager.GetBuffer((uint)data.Length);
+                Array.Clear(buffer.Data, 0, buffer.Data.Length);
                 Array.Copy(data, buffer.Data, data.Length);
                 
                 var response = new MemoryGetResponse(0x02, ErrorCode.OK, buffer);
@@ -298,6 +302,7 @@ public class ViceToolsMemoryOperationsTests : IDisposable
             {
                 // Create a new buffer for each call with the same data
                 var buffer = BufferManager.GetBuffer((uint)data.Length);
+                Array.Clear(buffer.Data, 0, buffer.Data.Length);
                 Array.Copy(data, buffer.Data, data.Length);
                 
                 var response = new MemoryGetResponse(0x02, ErrorCode.OK, buffer);
