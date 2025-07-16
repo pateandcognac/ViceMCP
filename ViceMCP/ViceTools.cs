@@ -235,6 +235,22 @@ public class ViceTools
             throw new InvalidOperationException($"Failed to reset: {result.ErrorCode}");
         }
 
+        // Resume execution since reset leaves the machine paused
+        try
+        {
+            var continueCmd = new ExitCommand();
+            var continueEnqueued = _viceBridge.EnqueueCommand(continueCmd);
+            var continueResult = await continueEnqueued.Response;
+            if (continueResult.ErrorCode != ErrorCode.OK)
+            {
+                Console.Error.WriteLine($"Warning: Failed to resume execution after reset: {continueResult.ErrorCode}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Warning: Could not auto-resume execution after reset: {ex.Message}");
+        }
+
         return $"Machine reset ({mode})";
     }
     
@@ -486,6 +502,23 @@ public class ViceTools
         
         // Give VICE time to start and open the binary monitor port
         await Task.Delay(_config.StartupTimeout);
+        
+        // Resume execution since VICE starts paused when binary monitor is enabled
+        try
+        {
+            await EnsureStartedAsync();
+            var continueCmd = new ExitCommand();
+            var continueEnqueued = _viceBridge.EnqueueCommand(continueCmd);
+            var result = await continueEnqueued.Response;
+            if (result.ErrorCode != ErrorCode.OK)
+            {
+                Console.Error.WriteLine($"Warning: Failed to resume execution: {result.ErrorCode}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Warning: Could not auto-resume execution: {ex.Message}");
+        }
         
         return $"Started {emulatorType} (PID: {process.Id}) with binary monitor on port {_config.BinaryMonitorPort}";
     }

@@ -42,7 +42,25 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(yamllint:*)",
       "Bash(git pull:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(dotnet run)",
+      "mcp__vicemcp__ping",
+      "mcp__vicemcp__start_vice",
+      "mcp__vicemcp__get_info",
+      "mcp__vicemcp__get_registers",
+      "mcp__vicemcp__continue_execution",
+      "mcp__vicemcp__send_keys",
+      "mcp__vicemcp__get_display",
+      "mcp__vicemcp__read_memory",
+      "mcp__vicemcp__write_memory",
+      "mcp__vicemcp__get_banks",
+      "mcp__vicemcp__set_checkpoint",
+      "mcp__vicemcp__list_checkpoints",
+      "mcp__vicemcp__reset",
+      "mcp__vicemcp__step",
+      "mcp__vicemcp__load_program",
+      "mcp__vicemcp__delete_checkpoint",
+      "mcp__vicemcp__quit_vice"
     ],
     "deny": []
   }
