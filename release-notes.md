@@ -1,25 +1,24 @@
-# ViceMCP v0.3.2 Release Notes
+# ViceMCP v0.3.3 Release Notes
 
-This release introduces a few bug fixes and minor improvements to the ViceMCP library, which provides a .NET interface for interacting with the VICE Commodore emulator.
+This release of ViceMCP focuses on improving the overall stability and reliability of the library. There are no new features, but several bug fixes and minor improvements have been made to enhance the user experience.
 
 ## Bug Fixes
 
-- 🐛 Fixed an issue that caused the emulator to freeze when certain commands were executed in rapid succession.
-- 🐛 Resolved a problem that prevented the library from properly handling emulator responses containing special characters.
+- 🐛 Resolved an issue that could cause the emulator to crash when certain commands were executed
+- 🐛 Fixed a bug that prevented the library from properly handling some error cases
 
 ## Improvements
 
-- 💡 Optimized the performance of the `GetDebugState()` method, reducing the time required to retrieve the emulator's current state.
-- 💡 Improved the reliability of the `ResetEmulator()` method, ensuring a more consistent reset process.
+- ⚙️ Optimized internal data structures to reduce memory usage and improve performance
+- ♻️ Refactored portions of the codebase to improve maintainability and extensibility
 
-## Compatibility
+## Upgrade Guidance
 
-This release is compatible with .NET 9.0 and later.
+This release does not contain any breaking changes, so users can safely upgrade from previous versions of ViceMCP.
 
-## Upgrade Instructions
+## Technical Details
 
-To upgrade to ViceMCP v0.3.2, simply update your project's package reference to the latest version. No other changes should be required.
-
-## Feedback and Support
-
-As always, we welcome your feedback and bug reports. If you encounter any issues or have suggestions for improving ViceMCP, please don't hesitate to reach out to our support team or submit an issue on the project's GitHub repository.
+- **Target Framework:** net9.0
+- **Notable Dependencies:**
+  - VICE Emulator v3.5.1
+  - System.ServiceModel.Primitives v4.8.1
