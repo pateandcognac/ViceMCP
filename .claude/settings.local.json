@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:vice-emu.sourceforge.io)",
+      "Bash(dotnet build)",
+      "Bash(python3:*)",
+      "Bash(nc:*)",
+      "Bash(pkill:*)",
+      "Bash(git clone:*)",
+      "Bash(dotnet add package:*)",
+      "Bash(find:*)",
+      "Bash(dotnet build:*)",
+      "Bash(dotnet add reference:*)",
+      "Bash(rm:*)",
+      "Bash(dotnet new:*)",
+      "Bash(dotnet sln add:*)",
+      "Bash(dotnet test)",
+      "Bash(dotnet test:*)",
+      "Bash(dotnet tool install:*)",
+      "Bash(reportgenerator:*)",
+      "Bash(ls:*)"
+    ],
+    "deny": []
+  }
+}

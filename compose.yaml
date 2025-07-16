@@ -1,0 +1,7 @@
+﻿services:
+  vicemcp:
+    image: vicemcp
+    build:
+      context: .
+      dockerfile: ViceMCP/Dockerfile
+

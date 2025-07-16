@@ -1,0 +1,102 @@
+Summary
+  Generated on: 7/16/2025 - 1:18:33 PM
+  Coverage date: 7/16/2025 - 1:18:13 PM
+  Parser: Cobertura
+  Assemblies: 2
+  Classes: 78
+  Files: 51
+  Line coverage: 9.9%
+  Covered lines: 137
+  Uncovered lines: 1243
+  Coverable lines: 1380
+  Total lines: 2985
+  Branch coverage: 5.7% (18 of 314)
+  Covered branches: 18
+  Total branches: 314
+  Method coverage: 13.7% (36 of 262)
+  Full method coverage: 11.8% (31 of 262)
+  Covered methods: 36
+  Fully covered methods: 31
+  Total methods: 262
+
+Righthand.ViceMonitor.Bridge                                                      4.3%
+  CommunicationData                                                                 0%
+  Righthand.ViceMonitor.Bridge.BufferManager                                      100%
+  Righthand.ViceMonitor.Bridge.Commands.AdvanceInstructionCommand                16.6%
+  Righthand.ViceMonitor.Bridge.Commands.AutoStartCommand                            0%
+  Righthand.ViceMonitor.Bridge.Commands.BanksAvailableCommand                       0%
+  Righthand.ViceMonitor.Bridge.Commands.CheckpointDeleteCommand                     0%
+  Righthand.ViceMonitor.Bridge.Commands.CheckpointGetCommand                        0%
+  Righthand.ViceMonitor.Bridge.Commands.CheckpointListCommand                       0%
+  Righthand.ViceMonitor.Bridge.Commands.CheckpointSetCommand                        0%
+  Righthand.ViceMonitor.Bridge.Commands.CheckpointToggleCommand                     0%
+  Righthand.ViceMonitor.Bridge.Commands.CommandResponse<T>                       63.6%
+  Righthand.ViceMonitor.Bridge.Commands.ConditionSetCommand                         0%
+  Righthand.ViceMonitor.Bridge.Commands.DisplayGetCommand                           0%
+  Righthand.ViceMonitor.Bridge.Commands.DumpCommand                                 0%
+  Righthand.ViceMonitor.Bridge.Commands.ExecuteUntilReturnCommand                   0%
+  Righthand.ViceMonitor.Bridge.Commands.ExitCommand                                 0%
+  Righthand.ViceMonitor.Bridge.Commands.InfoCommand                                 0%
+  Righthand.ViceMonitor.Bridge.Commands.KeyboardFeedCommand                         0%
+  Righthand.ViceMonitor.Bridge.Commands.MemoryGetCommand                           30%
+  Righthand.ViceMonitor.Bridge.Commands.MemorySetCommand                           20%
+  Righthand.ViceMonitor.Bridge.Commands.ParameterlessCommand<T>                    60%
+  Righthand.ViceMonitor.Bridge.Commands.PingCommand                               100%
+  Righthand.ViceMonitor.Bridge.Commands.QuitCommand                                 0%
+  Righthand.ViceMonitor.Bridge.Commands.RegistersAvailableCommand                   0%
+  Righthand.ViceMonitor.Bridge.Commands.RegistersGetCommand                        20%
+  Righthand.ViceMonitor.Bridge.Commands.RegistersSetCommand                         0%
+  Righthand.ViceMonitor.Bridge.Commands.ResetCommand                                0%
+  Righthand.ViceMonitor.Bridge.Commands.ResourceGetCommand                          0%
+  Righthand.ViceMonitor.Bridge.Commands.ResourceSetCommand                          0%
+  Righthand.ViceMonitor.Bridge.Commands.UndumpCommand                               0%
+  Righthand.ViceMonitor.Bridge.Commands.ViceCommand<T>                           15.9%
+  Righthand.ViceMonitor.Bridge.ConnectedChangedEventArgs                            0%
+  Righthand.ViceMonitor.Bridge.Exceptions.ResumeOnStoppedTimeoutException           0%
+  Righthand.ViceMonitor.Bridge.Exceptions.SocketDisconnectedException               0%
+  Righthand.ViceMonitor.Bridge.IoC                                                  0%
+  Righthand.ViceMonitor.Bridge.ManagedBuffer                                     62.5%
+  Righthand.ViceMonitor.Bridge.Responses.AutoStartResponse                          0%
+  Righthand.ViceMonitor.Bridge.Responses.BankItem                                   0%
+  Righthand.ViceMonitor.Bridge.Responses.BanksAvailableResponse                     0%
+  Righthand.ViceMonitor.Bridge.Responses.CheckpointInfoResponse                     0%
+  Righthand.ViceMonitor.Bridge.Responses.CheckpointListResponse                     0%
+  Righthand.ViceMonitor.Bridge.Responses.DisplayGetResponse                         0%
+  Righthand.ViceMonitor.Bridge.Responses.EmptyViceResponse                        100%
+  Righthand.ViceMonitor.Bridge.Responses.FullRegisterItem                           0%
+  Righthand.ViceMonitor.Bridge.Responses.InfoResponse                               0%
+  Righthand.ViceMonitor.Bridge.Responses.JamResponse                                0%
+  Righthand.ViceMonitor.Bridge.Responses.MemoryGetResponse                         25%
+  Righthand.ViceMonitor.Bridge.Responses.RegistersAvailableResponse                 0%
+  Righthand.ViceMonitor.Bridge.Responses.RegistersResponse                        100%
+  Righthand.ViceMonitor.Bridge.Responses.ResourceGetResponse                        0%
+  Righthand.ViceMonitor.Bridge.Responses.ResponseBuilder                            0%
+  Righthand.ViceMonitor.Bridge.Responses.ResumedResponse                            0%
+  Righthand.ViceMonitor.Bridge.Responses.StoppedResponse                            0%
+  Righthand.ViceMonitor.Bridge.Responses.UndumpResponse                             0%
+  Righthand.ViceMonitor.Bridge.Responses.ViceResponse                             100%
+  Righthand.ViceMonitor.Bridge.Services.Abstract.CommandCompletedEvent              0%
+  Righthand.ViceMonitor.Bridge.Services.Abstract.CommandSentEvent                   0%
+  Righthand.ViceMonitor.Bridge.Services.Abstract.DataAvailableEvent                 0%
+  Righthand.ViceMonitor.Bridge.Services.Abstract.PerformanceEvent                   0%
+  Righthand.ViceMonitor.Bridge.Services.Abstract.RawSendEvent                       0%
+  Righthand.ViceMonitor.Bridge.Services.Abstract.ResponseReadEvent                  0%
+  Righthand.ViceMonitor.Bridge.Services.Abstract.StartListeningEvent                0%
+  Righthand.ViceMonitor.Bridge.Services.Abstract.TraceEvent                         0%
+  Righthand.ViceMonitor.Bridge.Services.Implementation.NullMessagesHistory          0%
+  Righthand.ViceMonitor.Bridge.Services.Implementation.NullPerformanceProfiler      0%
+  Righthand.ViceMonitor.Bridge.Services.Implementation.PerformanceProfiler          0%
+  Righthand.ViceMonitor.Bridge.Services.Implementation.ViceBridge                   0%
+  Righthand.ViceMonitor.Bridge.Shared.IntegerResource                               0%
+  Righthand.ViceMonitor.Bridge.Shared.RegisterItem                                100%
+  Righthand.ViceMonitor.Bridge.Shared.StringResource                                0%
+  Righthand.ViceMonitor.Bridge.ViceResponseEventArgs                                0%
+  System.IO.BinaryReaderExtension                                                   0%
+  System.IO.BinaryWriterExtension                                                   0%
+  System.SystemExtension                                                            0%
+
+ViceMCP                                                                            31%
+  ViceMCP.EmptyPerformanceProfiler                                                  0%
+  ViceMCP.Program                                                                   0%
+  ViceMCP.SimpleMessagesHistory                                                     0%
+  ViceMCP.ViceTools                                                                34%
