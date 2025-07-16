@@ -1,20 +1,25 @@
-# ViceMCP v0.3.1
+# ViceMCP v0.3.2 Release Notes
 
-This release focuses on improving the stability and performance of the ViceMCP library, with no new feature additions.
-
-## Improvements
-
-- Optimized internal data structures for faster processing of MCP commands and responses.
-- Enhanced error handling and exception management to provide more informative feedback to users.
-- Improved overall library responsiveness and reduced latency when interacting with the VICE emulator.
+This release introduces a few bug fixes and minor improvements to the ViceMCP library, which provides a .NET interface for interacting with the VICE Commodore emulator.
 
 ## Bug Fixes
 
-- Resolved an issue that could cause occasional hangs or timeouts when communicating with the VICE emulator under high load.
-- Fixed a bug that could lead to incorrect parsing of certain MCP responses in specific edge cases.
+- 🐛 Fixed an issue that caused the emulator to freeze when certain commands were executed in rapid succession.
+- 🐛 Resolved a problem that prevented the library from properly handling emulator responses containing special characters.
 
-## Technical Details
+## Improvements
 
-- This release is compatible with the `.NET 9.0` framework.
-- No breaking changes have been introduced in this version.
-- The overall code quality and test coverage have been improved to ensure the library's reliability.
+- 💡 Optimized the performance of the `GetDebugState()` method, reducing the time required to retrieve the emulator's current state.
+- 💡 Improved the reliability of the `ResetEmulator()` method, ensuring a more consistent reset process.
+
+## Compatibility
+
+This release is compatible with .NET 9.0 and later.
+
+## Upgrade Instructions
+
+To upgrade to ViceMCP v0.3.2, simply update your project's package reference to the latest version. No other changes should be required.
+
+## Feedback and Support
+
+As always, we welcome your feedback and bug reports. If you encounter any issues or have suggestions for improving ViceMCP, please don't hesitate to reach out to our support team or submit an issue on the project's GitHub repository.
