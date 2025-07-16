@@ -390,6 +390,20 @@ jobs:
         username: ${{ vars.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
+    - name: Generate version tags
+      id: version_tags
+      run: |
+        VERSION="${{ needs.auto-release.outputs.new_version }}"
+        # Remove 'v' prefix if present
+        VERSION_NUM="${VERSION#v}"
+        # Split version
+        IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION_NUM"
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "version_num=${VERSION_NUM}" >> $GITHUB_OUTPUT
+        echo "major=${MAJOR}" >> $GITHUB_OUTPUT
+        echo "minor=${MINOR}" >> $GITHUB_OUTPUT
+        echo "major_minor=${MAJOR}.${MINOR}" >> $GITHUB_OUTPUT
+
     - name: Extract metadata
       id: meta
       uses: docker/metadata-action@v5
@@ -398,11 +412,11 @@ jobs:
           ghcr.io/${{ github.repository }}
           ${{ vars.DOCKER_USERNAME && format('{0}/vicemcp', vars.DOCKER_USERNAME) || '' }}
         tags: |
-          type=ref,event=tag
-          type=semver,pattern={{version}}
-          type=semver,pattern={{major}}.{{minor}}
-          type=semver,pattern={{major}}
-          type=raw,value=latest,enable={{is_default_branch}}
+          type=raw,value=${{ steps.version_tags.outputs.version_num }}
+          type=raw,value=${{ steps.version_tags.outputs.major_minor }}
+          type=raw,value=${{ steps.version_tags.outputs.major }}
+          type=raw,value=latest
+          type=raw,value=${{ github.sha }}
 
     - name: Build and push Docker images
       uses: docker/build-push-action@v5
