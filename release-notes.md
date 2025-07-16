@@ -1,24 +1,31 @@
-# ViceMCP v0.3.3 Release Notes
+# ViceMCP v0.4.0 Release Notes
 
-This release of ViceMCP focuses on improving the overall stability and reliability of the library. There are no new features, but several bug fixes and minor improvements have been made to enhance the user experience.
+This release introduces several new features and improvements to the ViceMCP library, a .NET project that provides tools for interfacing with the VICE Commodore emulator using the Model Context Protocol (MCP).
 
-## Bug Fixes
+## Features
 
-- 🐛 Resolved an issue that could cause the emulator to crash when certain commands were executed
-- 🐛 Fixed a bug that prevented the library from properly handling some error cases
+:sparkles: Added support for reading and writing Commodore disk images (D64 format) directly within the ViceMCP library.
+:sparkles: Implemented new methods to control emulator features like tape loading, reset, and power operations.
+:sparkles: Expanded the set of available MCP commands and responses, providing more granular control over the emulator.
 
 ## Improvements
 
-- ⚙️ Optimized internal data structures to reduce memory usage and improve performance
-- ♻️ Refactored portions of the codebase to improve maintainability and extensibility
+:zap: Significantly improved the overall performance and responsiveness of the library, reducing latency and improving the user experience.
+:truck: Reorganized and cleaned up the codebase, making it easier to maintain and extend in the future.
 
-## Upgrade Guidance
+## Bug Fixes
 
-This release does not contain any breaking changes, so users can safely upgrade from previous versions of ViceMCP.
+:bug: Fixed an issue that could cause the emulator to become unresponsive under certain conditions.
+:bug: Resolved a problem with incorrect handling of some MCP responses, ensuring more reliable and consistent behavior.
+
+## Breaking Changes
+
+:warning: The `EmulatorConnection` class has been renamed to `ViceConnection` to better reflect its purpose.
+:warning: Several method signatures have been updated to provide a more intuitive and consistent API. Existing code may need to be updated accordingly.
 
 ## Technical Details
 
-- **Target Framework:** net9.0
-- **Notable Dependencies:**
-  - VICE Emulator v3.5.1
-  - System.ServiceModel.Primitives v4.8.1
+- **Target Framework:** .NET 9.0
+- **Notable Dependencies:** VICE Commodore Emulator, MCP protocol specification
+
+Please refer to the project's documentation for more information on using the ViceMCP library and its new features.
