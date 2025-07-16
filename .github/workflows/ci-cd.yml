@@ -347,15 +347,14 @@ jobs:
         fi
 
     - name: Upload release artifact
+      shell: bash
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-          gh release upload "${{ needs.auto-release.outputs.new_version }}" \
-            "${{ matrix.artifact }}.zip" --clobber
+          gh release upload "${{ needs.auto-release.outputs.new_version }}" "${{ matrix.artifact }}.zip" --clobber
         else
-          gh release upload "${{ needs.auto-release.outputs.new_version }}" \
-            "${{ matrix.artifact }}.tar.gz" --clobber
+          gh release upload "${{ needs.auto-release.outputs.new_version }}" "${{ matrix.artifact }}.tar.gz" --clobber
         fi
 
   docker-release:
