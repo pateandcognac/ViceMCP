@@ -31,7 +31,11 @@
       "Bash(unset GITHUB_TOKEN)",
       "Bash(gh run view:*)",
       "Bash(grep:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(gh release list:*)",
+      "Bash(gh release view:*)",
+      "Bash(git fetch:*)",
+      "Bash(gh workflow run:*)"
     ],
     "deny": []
   }

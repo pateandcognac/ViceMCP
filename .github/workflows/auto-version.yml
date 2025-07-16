@@ -161,3 +161,9 @@ jobs:
           --title "Release ${{ steps.new_version.outputs.version }}" \
           --notes "${{ steps.notes.outputs.notes }}" \
           --latest
+
+    - name: Trigger release build
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh workflow run release.yml -f version=${{ steps.new_version.outputs.version }}
