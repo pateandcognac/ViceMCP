@@ -242,9 +242,7 @@ jobs:
         
         if [[ -n $(git status -s) ]]; then
           git add -A
-          git commit -m "chore: bump version to ${{ steps.version.outputs.new_version }}
-
-[skip ci]"
+          git commit -m "chore: bump version to ${{ steps.version.outputs.new_version }} [skip ci]"
           git push
         fi
 
