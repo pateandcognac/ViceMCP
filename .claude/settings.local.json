@@ -18,7 +18,14 @@
       "Bash(dotnet test:*)",
       "Bash(dotnet tool install:*)",
       "Bash(reportgenerator:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(git add:*)",
+      "Bash(git rm:*)",
+      "Bash(git submodule:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(curl:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }

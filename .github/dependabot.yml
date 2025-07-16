@@ -9,7 +9,7 @@ updates:
       time: "04:00"
     open-pull-requests-limit: 10
     reviewers:
-      - "@yourusername"  # Replace with actual username
+      - "@barryw"
     labels:
       - "dependencies"
       - "nuget"
@@ -26,7 +26,7 @@ updates:
       time: "04:00"
     open-pull-requests-limit: 10
     reviewers:
-      - "@yourusername"  # Replace with actual username
+      - "@barryw"
     labels:
       - "dependencies"
       - "github-actions"
@@ -43,7 +43,7 @@ updates:
       time: "04:00"
     open-pull-requests-limit: 10
     reviewers:
-      - "@yourusername"  # Replace with actual username
+      - "@barryw"
     labels:
       - "dependencies"
       - "docker"

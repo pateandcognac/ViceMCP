@@ -49,7 +49,7 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 
 2. Clone your fork:
    ```bash
-   git clone https://github.com/yourusername/ViceMCP.git
+   git clone https://github.com/barryw/ViceMCP.git
    cd ViceMCP
    ```
 

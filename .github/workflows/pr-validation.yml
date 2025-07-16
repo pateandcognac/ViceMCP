@@ -44,6 +44,7 @@ jobs:
       uses: actions/labeler@v5
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        sync-labels: true
 
     - name: Check PR size
       uses: CodelyTV/pr-size-labeler@v1
@@ -76,13 +77,14 @@ jobs:
           
           A maintainer will review your PR soon. In the meantime, please ensure all CI checks pass.
 
-  assign-reviewers:
-    name: Assign Reviewers
-    runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
-    
-    steps:
-    - name: Auto-assign reviewers
-      uses: kentaro-m/auto-assign-action@v2.0.0
-      with:
-        configuration-path: '.github/auto-assign.yml'
+  # Reviewer assignment disabled until repository has collaborators
+  # assign-reviewers:
+  #   name: Assign Reviewers
+  #   runs-on: ubuntu-latest
+  #   if: github.event.pull_request.draft == false
+  #   
+  #   steps:
+  #   - name: Auto-assign reviewers
+  #     uses: kentaro-m/auto-assign-action@v2.0.0
+  #     with:
+  #       configuration-path: '.github/auto-assign.yml'
