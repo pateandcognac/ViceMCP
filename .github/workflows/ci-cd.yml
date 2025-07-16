@@ -87,7 +87,7 @@ jobs:
         dotnet tool install -g dotnet-reportgenerator-globaltool || true
         export PATH="$PATH:$HOME/.dotnet/tools"
         reportgenerator -reports:TestResults/**/coverage.cobertura.xml \
-          -targetdir:coverage -reporttypes:Html;Cobertura;MarkdownSummaryGithub || echo "Coverage report generation failed"
+          -targetdir:coverage "-reporttypes:Html;Cobertura;MarkdownSummaryGithub" || echo "Coverage report generation failed"
 
     - name: Upload coverage to Codecov
       if: matrix.os == 'ubuntu-latest'
