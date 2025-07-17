@@ -222,6 +222,7 @@ vice.log
 
 # Coverage reports
 coverage/
+coveragereport/
 *.lcov
 .nyc_output/
 
