@@ -77,7 +77,8 @@
       "Bash(fi)",
       "Bash(done)",
       "Bash(dotnet run:*)",
-      "Bash(true)"
+      "Bash(true)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }

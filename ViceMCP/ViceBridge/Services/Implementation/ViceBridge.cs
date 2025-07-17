@@ -28,6 +28,7 @@ namespace ViceMCP.ViceBridge.Services.Implementation
         private Socket? _socket;
         private uint _currentRequestId;
         private bool _isConnected;
+        private volatile bool _viceIsStopped = false;
         private readonly object _stateLock = new();
 
         public IPerformanceProfiler PerformanceProfiler { get; }
@@ -303,15 +304,26 @@ namespace ViceMCP.ViceBridge.Services.Implementation
                 // Handle auto-resume if needed
                 if (pending.ResumeOnStopped && response.ErrorCode == ErrorCode.OK)
                 {
-                    _logger.LogDebug("Auto-resume: Sending exit command after successful {CommandType}", pending.Command.GetType().Name);
-                    // Simply send an exit command to ensure VICE is running
-                    // This is simpler than trying to detect if it's actually stopped
-                    var exitCommand = new ExitCommand();
-                    _currentRequestId++;
-                    await SendCommandAsync(_socket!, _currentRequestId, exitCommand, ct);
-                    var exitResponse = await WaitForResponseAsync(_currentRequestId, ct);
+                    bool shouldResume;
+                    lock (_stateLock)
+                    {
+                        shouldResume = _viceIsStopped;
+                    }
+                    
+                    if (shouldResume)
+                    {
+                        _logger.LogDebug("Auto-resume: VICE is stopped, sending exit command after successful {CommandType}", pending.Command.GetType().Name);
+                        var exitCommand = new ExitCommand();
+                        _currentRequestId++;
+                        await SendCommandAsync(_socket!, _currentRequestId, exitCommand, ct);
+                        var exitResponse = await WaitForResponseAsync(_currentRequestId, ct);
 
-                    _logger.LogDebug("Auto-resume result: {Result} for exit command", exitResponse.ErrorCode);
+                        _logger.LogDebug("Auto-resume result: {Result} for exit command", exitResponse.ErrorCode);
+                    }
+                    else
+                    {
+                        _logger.LogDebug("Auto-resume: VICE is already running, no exit command needed after {CommandType}", pending.Command.GetType().Name);
+                    }
                 }
                 else if (pending.ResumeOnStopped)
                 {
@@ -422,6 +434,25 @@ namespace ViceMCP.ViceBridge.Services.Implementation
 
             // It's a different response (broadcast or for another request)
             _logger.LogDebug("Received unmatched response {Type} for request {RequestId}", response.GetType().Name, requestId);
+            
+            // Track VICE execution state even for unmatched responses
+            if (response is StoppedResponse)
+            {
+                lock (_stateLock)
+                {
+                    _viceIsStopped = true;
+                    _logger.LogDebug("VICE has stopped (monitor mode) - from unmatched response");
+                }
+            }
+            else if (response is ResumedResponse)
+            {
+                lock (_stateLock)
+                {
+                    _viceIsStopped = false;
+                    _logger.LogDebug("VICE has resumed execution - from unmatched response");
+                }
+            }
+            
             MessagesHistory.AddsResponseOnly(response);
             ViceResponse?.Invoke(this, new ViceResponseEventArgs(response));
 
@@ -445,6 +476,25 @@ namespace ViceMCP.ViceBridge.Services.Implementation
                 {
                     var (response, requestId) = await ReadResponseAsync(_socket, ct);
                     _logger.LogDebug("Processing incoming {Type} for request {RequestId}", response.GetType().Name, requestId);
+                    
+                    // Track VICE execution state
+                    if (response is StoppedResponse)
+                    {
+                        lock (_stateLock)
+                        {
+                            _viceIsStopped = true;
+                            _logger.LogDebug("VICE has stopped (monitor mode)");
+                        }
+                    }
+                    else if (response is ResumedResponse)
+                    {
+                        lock (_stateLock)
+                        {
+                            _viceIsStopped = false;
+                            _logger.LogDebug("VICE has resumed execution");
+                        }
+                    }
+                    
                     MessagesHistory.AddsResponseOnly(response);
                     ViceResponse?.Invoke(this, new ViceResponseEventArgs(response));
                 }
