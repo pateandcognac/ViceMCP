@@ -1,17 +1,18 @@
-# ViceMCP v0.6.7 Release Notes
+# ViceMCP v0.6.8 Release Notes
 
-This release of ViceMCP includes bug fixes and performance improvements to the MCP tools for interfacing with the VICE Commodore emulator.
+This release focuses on bug fixes and minor improvements to the ViceMCP library, which provides a .NET interface for interacting with the VICE Commodore emulator.
 
 ## Bug Fixes
 
-🐛 Resolved an issue that could cause the emulator to crash when certain commands were executed.
-🐛 Fixed a bug that prevented the `ReadMemory` function from returning the correct data in some cases.
+- 🐛 Resolved an issue that could cause the emulator to crash when loading certain ROM images
+- 🐛 Fixed a bug that prevented the library from properly handling some emulator control commands
 
 ## Improvements
 
-⚡️ Improved the overall reliability and stability of the MCP protocol implementation.
-🧠 Enhanced the error handling and reporting mechanisms to provide developers with more detailed information when issues occur.
+- ⚙️ Improved the overall stability and reliability of the library's emulator integration
+- 🧹 Performed code cleanup and refactoring to improve maintainability
 
-## Technical Details
+## Developers
 
-This release targets the `.NET 9.0` framework. There are no breaking changes in this version.
+- This release targets the .NET 9.0 framework.
+- No breaking changes have been introduced in this version.
