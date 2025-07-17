@@ -385,6 +385,10 @@ Tests use mocking to run without VICE, ensuring fast CI/CD.
 - 🛠️ **Tool Development** - Automate debugging workflows
 - 🏆 **Demoscene** - Profile and optimize demo effects
 
+## ⚠️ Known Limitations
+
+- **Auto-Resume**: VICE pauses after write operations. Use `continue_execution` to resume. See [KNOWN_ISSUES.md](KNOWN_ISSUES.md) for details.
+
 ## 🤝 Contributing
 
 We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.

@@ -304,31 +304,31 @@ namespace ViceMCP.ViceBridge.Services.Implementation
                 // Handle auto-resume if needed
                 if (pending.ResumeOnStopped && response.ErrorCode == ErrorCode.OK)
                 {
-                    bool shouldResume;
-                    lock (_stateLock)
-                    {
-                        shouldResume = _viceIsStopped;
-                    }
+                    // Always send exit command after state-modifying operations
+                    // VICE appears to pause whenever accessed via binary monitor
+                    _logger.LogInformation("Auto-resume: Sending exit command after successful {CommandType} (request {RequestId})", 
+                        pending.Command.GetType().Name, _currentRequestId);
                     
-                    if (shouldResume)
-                    {
-                        _logger.LogDebug("Auto-resume: VICE is stopped, sending exit command after successful {CommandType}", pending.Command.GetType().Name);
-                        var exitCommand = new ExitCommand();
-                        _currentRequestId++;
-                        await SendCommandAsync(_socket!, _currentRequestId, exitCommand, ct);
-                        var exitResponse = await WaitForResponseAsync(_currentRequestId, ct);
+                    // Small delay to ensure VICE has processed the command
+                    await Task.Delay(10, ct);
+                    
+                    var exitCommand = new ExitCommand();
+                    _currentRequestId++;
+                    await SendCommandAsync(_socket!, _currentRequestId, exitCommand, ct);
+                    var exitResponse = await WaitForResponseAsync(_currentRequestId, ct);
 
-                        _logger.LogDebug("Auto-resume result: {Result} for exit command", exitResponse.ErrorCode);
-                    }
-                    else
-                    {
-                        _logger.LogDebug("Auto-resume: VICE is already running, no exit command needed after {CommandType}", pending.Command.GetType().Name);
-                    }
+                    _logger.LogInformation("Auto-resume result: {Result} for exit command (response type: {ResponseType})", 
+                        exitResponse.ErrorCode, exitResponse.GetType().Name);
                 }
                 else if (pending.ResumeOnStopped)
                 {
-                    _logger.LogDebug("Auto-resume skipped: Command {CommandType} returned {ErrorCode}", 
-                        pending.Command.GetType().Name, response.ErrorCode);
+                    _logger.LogWarning("Auto-resume skipped: Command {CommandType} returned {ErrorCode}, resumeOnStopped={ResumeOnStopped}", 
+                        pending.Command.GetType().Name, response.ErrorCode, pending.ResumeOnStopped);
+                }
+                else
+                {
+                    _logger.LogDebug("No auto-resume: Command {CommandType} has resumeOnStopped={ResumeOnStopped}", 
+                        pending.Command.GetType().Name, pending.ResumeOnStopped);
                 }
 
                 _currentRequestId++;
