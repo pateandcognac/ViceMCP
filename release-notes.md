@@ -1,20 +1,30 @@
-# ViceMCP v0.5.1 Release Notes
+# ViceMCP v0.6.0 Release Notes
 
-This release includes a few minor bug fixes and improvements to the ViceMCP library, a .NET tool for interfacing with the VICE Commodore emulator.
+This release introduces several new features and improvements to the ViceMCP library, which provides a .NET-based interface for interacting with the VICE Commodore emulator. Notable changes include enhanced support for memory management, improved error handling, and new tools for remote emulator control.
 
-## Bug Fixes
+## Features
 
-🐛 Fixed an issue where the emulator would sometimes fail to start on certain systems.
-🐛 Resolved a problem that could cause data corruption when transferring large files.
+✨ **Enhanced Memory Management**: ViceMCP now offers expanded functionality for reading and writing memory within the emulated environment. Developers can more easily access and manipulate memory regions, enabling advanced emulation scenarios.
+
+🔌 **Remote Emulator Control**: A new set of APIs allows developers to start, stop, and control the VICE emulator remotely. This enables integration of ViceMCP into larger application architectures.
 
 ## Improvements
 
-🚀 Optimized memory usage to improve overall performance.
-🔍 Enhanced error handling and logging for a better debugging experience.
+🚀 **Faster Emulator Startup**: The startup process for the VICE emulator has been optimized, resulting in quicker initialization times and improved overall responsiveness.
 
-## Dependency Updates
+📚 **Expanded Documentation**: The project's documentation has been expanded to include more detailed guides, examples, and API references, making it easier for developers to integrate ViceMCP into their applications.
 
-- Updated to .NET 9.0
-- Bumped VICE emulator dependency to v3.5.1
+## Bug Fixes
 
-No breaking changes in this release. Enjoy!
+🐛 **Improved Error Handling**: ViceMCP now provides more robust error handling, ensuring that developers receive clear and informative feedback when encountering issues during emulator interactions.
+
+## Breaking Changes
+
+‼️ **API Restructuring**: The ViceMCP API has undergone some reorganization to improve consistency and clarity. Developers upgrading from previous versions may need to update their code to reflect these changes.
+
+## Technical Details
+
+- **Target Framework**: .NET 9.0
+- **Notable Dependencies**: VICE Emulator v3.5, System.Memory v4.5.5
+
+For more information, please refer to the [ViceMCP GitHub repository](https://github.com/your-org/vicemcp) or the [project documentation](https://docs.vicemcp.com).
