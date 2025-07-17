@@ -44,3 +44,5 @@ ignore:
   - "**/Program.cs"
   - "**/*.Designer.cs"
   - "**/Migrations/**/*"
+  - "ViceMCP/ViceBridge/**/*"
+  - "TestViceBridge/**/*"
