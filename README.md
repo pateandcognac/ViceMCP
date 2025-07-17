@@ -12,7 +12,7 @@
 
 **AI-Powered Commodore Development Bridge**
 
-[Documentation](Documentation/) • [MCP Tools Reference](#-mcp-tools-reference) • [Quick Start](#-quick-start) • [Examples](#-examples)
+[MCP Tools Reference](#-mcp-tools-reference) • [Quick Start](#-quick-start) • [Examples](#-examples)
 
 </div>
 
@@ -25,9 +25,27 @@ ViceMCP bridges the gap between modern AI assistants and retro computing by expo
 - 🤖 **AI Integration** - Use Claude or other MCP clients to debug Commodore programs
 - 🔍 **Memory Operations** - Read, write, search, and analyze memory in real-time
 - 🐛 **Advanced Debugging** - Set breakpoints, step through code, examine registers
+- ⚡ **Batch Commands** - Execute multiple operations in one shot for 10x performance
 - 📦 **Zero Dependencies** - Self-contained MCP server with embedded VICE bridge
 - 🚀 **Cross-Platform** - Works on Windows, macOS, and Linux
 - 🎮 **Multi-Machine Support** - C64, C128, VIC-20, PET, Plus/4, and more
+
+### ⚡ Batch Commands - 10x Performance Boost!
+
+Execute multiple VICE operations in a single command for massive performance gains:
+
+```json
+execute_batch [
+  {"command": "write_memory", "parameters": {"startHex": "0xD020", "dataHex": "00"}},
+  {"command": "write_memory", "parameters": {"startHex": "0xD021", "dataHex": "05"}},
+  {"command": "fill_memory", "parameters": {"startHex": "0x0400", "endHex": "0x07E7", "pattern": "A0"}},
+  {"command": "write_memory", "parameters": {"startHex": "0x0400", "dataHex": "08 05 0C 0C 0F"}}
+]
+```
+
+**Result**: Set border/background colors, clear screen, and write "HELLO" in ~1.4 seconds instead of ~14 seconds! 
+
+Check out the [batch_examples/](batch_examples/) directory for ready-to-use JSON files.
 
 ## Installation
 
@@ -58,6 +76,24 @@ x64sc -binarymonitor -binarymonitoraddress 127.0.0.1:6502
 ```
 
 ### 2️⃣ Configure your MCP Client
+
+#### Using Claude Code CLI (Recommended)
+
+```bash
+# If you downloaded the release binary
+claude mcp add vicemcp ~/Downloads/vicemcp-osx-arm64/ViceMCP
+
+# Or if you built from source
+claude mcp add vicemcp ~/RiderProjects/ViceMCP/ViceMCP/bin/Release/net9.0/ViceMCP
+```
+
+With VICE path configured (if not in system PATH):
+
+```bash
+claude mcp add vicemcp ~/Downloads/vicemcp-osx-arm64/ViceMCP --env VICE_BIN_PATH=/Applications/vice-x86-64-gtk3-3.8
+```
+
+#### Manual Configuration
 
 Add to your Claude Desktop or other MCP client configuration:
 
@@ -352,14 +388,19 @@ AI: I'll check if the sprite data was copied correctly...
 
 ### Batch Operations for Speed ⚡
 ```
-AI: I'll set up a complete sprite display using batch execution...
+AI: I'll create a red heart sprite in the center of the screen...
 > execute_batch [
-    {"command": "write_memory", "parameters": {"startHex": "0xD020", "dataHex": "00"}},
-    {"command": "write_memory", "parameters": {"startHex": "0xD021", "dataHex": "00"}},
-    {"command": "fill_memory", "parameters": {"startHex": "0x0400", "endHex": "0x07E7", "pattern": "20"}},
-    // ... more commands
+    {"command": "write_memory", "parameters": {"startHex": "0xD020", "dataHex": "00"}, "description": "Black border"},
+    {"command": "write_memory", "parameters": {"startHex": "0xD021", "dataHex": "00"}, "description": "Black background"},
+    {"command": "fill_memory", "parameters": {"startHex": "0x0400", "endHex": "0x07E7", "pattern": "20"}, "description": "Clear screen"},
+    {"command": "write_memory", "parameters": {"startHex": "0x0340", "dataHex": "00 66 00 01 FF 80 03 FF C0 07 FF E0 0F FF F0..."}, "description": "Heart sprite data"},
+    {"command": "write_memory", "parameters": {"startHex": "0x07F8", "dataHex": "0D"}, "description": "Set sprite pointer"},
+    {"command": "write_memory", "parameters": {"startHex": "0xD015", "dataHex": "01"}, "description": "Enable sprite 0"},
+    {"command": "write_memory", "parameters": {"startHex": "0xD000", "dataHex": "A0"}, "description": "Center X position"},
+    {"command": "write_memory", "parameters": {"startHex": "0xD001", "dataHex": "86"}, "description": "Center Y position"},
+    {"command": "write_memory", "parameters": {"startHex": "0xD027", "dataHex": "02"}, "description": "Red color"}
   ]
-// Executes 10 commands in ~1.4 seconds vs ~14 seconds individually!
+// Result: Beautiful red heart sprite in 1.4 seconds! (vs 14+ seconds individually)
 ```
 
 ## 🏗️ Architecture
@@ -393,11 +434,8 @@ Tests use mocking to run without VICE, ensuring fast CI/CD.
 
 ## 📖 Documentation
 
-- [Getting Started Guide](Documentation/GettingStarted.md)
-- [MCP Tools Reference](Documentation/ToolsReference.md)
-- [Configuration Options](Documentation/Configuration.md)
-- [Troubleshooting](Documentation/Troubleshooting.md)
 - [Contributing Guidelines](CONTRIBUTING.md)
+- [Known Issues](KNOWN_ISSUES.md)
 
 ## 🎯 Use Cases
 
@@ -409,7 +447,7 @@ Tests use mocking to run without VICE, ensuring fast CI/CD.
 
 ## ⚠️ Known Limitations
 
-- **Auto-Resume**: VICE pauses after write operations. Use `continue_execution` to resume. See [KNOWN_ISSUES.md](KNOWN_ISSUES.md) for details.
+See [KNOWN_ISSUES.md](KNOWN_ISSUES.md) for any current limitations.
 
 ## 🤝 Contributing
 

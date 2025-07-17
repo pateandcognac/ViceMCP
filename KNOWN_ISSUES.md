@@ -1,31 +1,22 @@
 # Known Issues
 
-## Auto-Resume After Write Operations
+## ~~Auto-Resume After Write Operations~~ ✅ FIXED
 
 **Issue**: VICE emulator pauses (enters monitor mode) after write operations via the binary monitor protocol, and the auto-resume feature is not working as expected.
 
-**Status**: Under investigation
+**Status**: ✅ **FIXED** (as of v0.6.9)
 
-**Details**:
+**Solution**: 
+The auto-resume feature now detects when VICE is paused by checking the jiffy clock (memory addresses $A0-$A2). If the jiffy clock hasn't changed between two reads, VICE is paused and an `ExitCommand` is automatically sent to resume execution.
+
+**Previous Details**:
 - When performing memory writes or register updates through ViceMCP, VICE enters monitor mode and pauses execution
 - The auto-resume feature attempts to send an `ExitCommand` after successful write operations
 - Despite sending the exit command successfully, VICE remains paused
 - Users must manually call `continue_execution` to resume VICE
 
-**Workaround**:
-After performing write operations, explicitly call the `continue_execution` tool:
-```
-write_memory startHex: "0xD020", dataHex: "05"
-continue_execution
-```
-
-**Technical Notes**:
-- The `ExitCommand` is being sent correctly with `ErrorCode.OK` response
-- Added logging shows the auto-resume logic is executing
-- VICE may have specific requirements for resuming execution that aren't documented in the binary monitor protocol
-- The issue does not occur with read operations, only state-modifying operations
-
-**Next Steps**:
-- Investigate VICE source code for binary monitor protocol handling
-- Test with different VICE versions
-- Consider alternative approaches to auto-resume (e.g., using checkpoint commands)
+**How it was fixed**:
+- Implemented jiffy clock detection to determine if VICE is paused
+- Auto-resume now checks after EVERY successful command (except ExitCommand itself)
+- Added proper timing delays to ensure reliable detection
+- VICE now stays running after all operations
