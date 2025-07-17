@@ -304,21 +304,27 @@ namespace ViceMCP.ViceBridge.Services.Implementation
                 // Handle auto-resume if needed
                 if (pending.ResumeOnStopped && response.ErrorCode == ErrorCode.OK)
                 {
-                    // Always send exit command after state-modifying operations
-                    // VICE appears to pause whenever accessed via binary monitor
-                    _logger.LogInformation("Auto-resume: Sending exit command after successful {CommandType} (request {RequestId})", 
-                        pending.Command.GetType().Name, _currentRequestId);
+                    // Check if VICE is actually paused using jiffy clock
+                    var isPaused = await IsVicePausedAsync(ct);
                     
-                    // Small delay to ensure VICE has processed the command
-                    await Task.Delay(10, ct);
-                    
-                    var exitCommand = new ExitCommand();
-                    _currentRequestId++;
-                    await SendCommandAsync(_socket!, _currentRequestId, exitCommand, ct);
-                    var exitResponse = await WaitForResponseAsync(_currentRequestId, ct);
+                    if (isPaused)
+                    {
+                        _logger.LogInformation("Auto-resume: VICE is paused, sending exit command after successful {CommandType}", 
+                            pending.Command.GetType().Name);
+                        
+                        var exitCommand = new ExitCommand();
+                        _currentRequestId++;
+                        await SendCommandAsync(_socket!, _currentRequestId, exitCommand, ct);
+                        var exitResponse = await WaitForResponseAsync(_currentRequestId, ct);
 
-                    _logger.LogInformation("Auto-resume result: {Result} for exit command (response type: {ResponseType})", 
-                        exitResponse.ErrorCode, exitResponse.GetType().Name);
+                        _logger.LogInformation("Auto-resume result: {Result} for exit command (response type: {ResponseType})", 
+                            exitResponse.ErrorCode, exitResponse.GetType().Name);
+                    }
+                    else
+                    {
+                        _logger.LogDebug("Auto-resume: VICE is running, no exit command needed after {CommandType}", 
+                            pending.Command.GetType().Name);
+                    }
                 }
                 else if (pending.ResumeOnStopped)
                 {
@@ -338,6 +344,60 @@ namespace ViceMCP.ViceBridge.Services.Implementation
             {
                 pending.Command.SetException(ex);
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// Checks if VICE is paused by reading the jiffy clock twice
+        /// </summary>
+        private async Task<bool> IsVicePausedAsync(CancellationToken ct)
+        {
+            try
+            {
+                // Read jiffy clock at $A0-$A2
+                var readCmd1 = new MemoryGetCommand(0, 0x00A0, 0x00A2, MemSpace.MainMemory, 0);
+                _currentRequestId++;
+                await SendCommandAsync(_socket!, _currentRequestId, readCmd1, ct);
+                var response1 = await WaitForResponseAsync(_currentRequestId, ct) as MemoryGetResponse;
+                
+                if (response1?.Memory == null) return false;
+                
+                var jiffy1 = new byte[3];
+                using (var buffer1 = response1.Memory.Value)
+                {
+                    Array.Copy(buffer1.Data, jiffy1, 3);
+                }
+                
+                // Small delay
+                await Task.Delay(50, ct);
+                
+                // Read again
+                var readCmd2 = new MemoryGetCommand(0, 0x00A0, 0x00A2, MemSpace.MainMemory, 0);
+                _currentRequestId++;
+                await SendCommandAsync(_socket!, _currentRequestId, readCmd2, ct);
+                var response2 = await WaitForResponseAsync(_currentRequestId, ct) as MemoryGetResponse;
+                
+                if (response2?.Memory == null) return false;
+                
+                using (var buffer2 = response2.Memory.Value)
+                {
+                    // If jiffy clock hasn't changed, VICE is paused
+                    bool isPaused = jiffy1[0] == buffer2.Data[0] && 
+                                   jiffy1[1] == buffer2.Data[1] && 
+                                   jiffy1[2] == buffer2.Data[2];
+                    
+                    _logger.LogDebug("Jiffy clock check: {J1:X2}{J2:X2}{J3:X2} vs {B1:X2}{B2:X2}{B3:X2} - Paused: {IsPaused}",
+                        jiffy1[0], jiffy1[1], jiffy1[2],
+                        buffer2.Data[0], buffer2.Data[1], buffer2.Data[2],
+                        isPaused);
+                    
+                    return isPaused;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to check if VICE is paused");
+                return false;
             }
         }
 
