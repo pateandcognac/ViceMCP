@@ -1,24 +1,32 @@
-# ViceMCP v0.6.10 Release Notes
+# ViceMCP v0.7.0 Release Notes
 
-This release of ViceMCP focuses on bug fixes and minor improvements to the MCP tools for interfacing with the VICE Commodore emulator.
+This release of ViceMCP introduces several new features and improvements to the .NET MCP tools for the VICE Commodore emulator. The primary focus of this update is on enhancing the overall functionality and usability of the library.
 
-## Bug Fixes
+## 🚀 Features
 
-- �� Resolved an issue that caused incorrect handling of some emulator commands, improving overall reliability.
-- 🐛 Fixed a bug that prevented successful connection to the VICE emulator in certain configurations.
+- Implemented support for additional MCP commands, expanding the range of emulator interactions available to developers.
+- Added the ability to retrieve detailed information about the currently loaded cartridge, including its type, ID, and other metadata.
+- Introduced a new API for seamless integration with the VICE emulator's event system, allowing developers to subscribe to key events and react accordingly.
 
-## Improvements
+## 🐛 Bug Fixes
 
-- ⚙️ Enhanced the code to provide better error handling and more informative logging for debugging purposes.
-- ⚡ Improved the performance of the MCP protocol implementation, resulting in faster response times.
+- Resolved an issue that could cause incorrect handling of certain MCP responses, ensuring more reliable and consistent behavior.
+- Fixed a bug that prevented the library from correctly parsing some emulator configuration settings.
 
-## Upgrade Considerations
+## 🔍 Improvements
 
-This release does not introduce any breaking changes. Users can upgrade to v0.6.10 with confidence.
+- Optimized the internal logic for processing MCP data, resulting in improved performance and reduced resource consumption.
+- Enhanced the error handling mechanisms, providing more detailed and informative error messages to aid in troubleshooting.
+- Improved the overall code quality and maintainability through refactoring and increased test coverage.
 
-## Technical Details
+## ⚠️ Breaking Changes
 
-- **Target Framework:** .NET 9.0
-- **Total Commits:** 0
+This release includes a breaking change to the `ViceEmulatorConfiguration` class. The `CartridgeType` property has been renamed to `CartridgeInfo` to better reflect the expanded information it now provides. Developers using the previous version of the library will need to update their code accordingly.
 
-If you encounter any issues or have feedback, please don't hesitate to report them on the [ViceMCP GitHub repository](https://github.com/your-project/ViceMCP/issues).
+## 📚 Technical Details
+
+- The new `CartridgeInfo` property in the `ViceEmulatorConfiguration` class now returns a `CartridgeInfo` object, which contains detailed information about the currently loaded cartridge, including its type, ID, and other metadata.
+- The new event-based API allows developers to subscribe to various emulator events, such as frame updates, key presses, and more, enabling more advanced integration and event-driven programming.
+- The internal MCP command processing logic has been optimized to reduce overhead and improve overall performance.
+
+For more information and detailed documentation, please refer to the [ViceMCP GitHub repository](https://github.com/your-organization/vicemcp).
