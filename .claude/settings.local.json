@@ -62,7 +62,22 @@
       "mcp__vicemcp__delete_checkpoint",
       "mcp__vicemcp__quit_vice",
       "mcp__vicemcp__set_register",
-      "Bash(dotnet clean:*)"
+      "Bash(dotnet clean:*)",
+      "mcp__vicemcp__copy_memory",
+      "mcp__vicemcp__fill_memory",
+      "Bash(git restore:*)",
+      "Bash(git log:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(for:*)",
+      "Bash(do)",
+      "Bash(if ! grep -q \"using System.Collections.Immutable;\" \"$file\")",
+      "Bash(then)",
+      "Bash(sed:*)",
+      "Bash(fi)",
+      "Bash(done)",
+      "Bash(dotnet run:*)",
+      "Bash(true)"
     ],
     "deny": []
   }

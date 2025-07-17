@@ -2,11 +2,11 @@ using System.Collections.Immutable;
 using System.Reflection;
 using FluentAssertions;
 using Moq;
-using Righthand.ViceMonitor.Bridge;
-using Righthand.ViceMonitor.Bridge.Commands;
-using Righthand.ViceMonitor.Bridge.Responses;
-using Righthand.ViceMonitor.Bridge.Services.Abstract;
-using Righthand.ViceMonitor.Bridge.Shared;
+using ViceMCP.ViceBridge;
+using ViceMCP.ViceBridge.Commands;
+using ViceMCP.ViceBridge.Responses;
+using ViceMCP.ViceBridge.Services.Abstract;
+using ViceMCP.ViceBridge.Shared;
 
 namespace ViceMCP.Tests;
 

@@ -19,10 +19,10 @@ public class Program
         builder.Services.AddSingleton(ViceConfiguration.FromEnvironment());
         
         // Add ViceBridge services
-        builder.Services.AddSingleton<Righthand.ViceMonitor.Bridge.Responses.ResponseBuilder>();
-        builder.Services.AddSingleton<Righthand.ViceMonitor.Bridge.Services.Abstract.IPerformanceProfiler, EmptyPerformanceProfiler>();
-        builder.Services.AddSingleton<Righthand.ViceMonitor.Bridge.Services.Abstract.IMessagesHistory, SimpleMessagesHistory>();
-        builder.Services.AddSingleton<Righthand.ViceMonitor.Bridge.Services.Abstract.IViceBridge, Righthand.ViceMonitor.Bridge.Services.Implementation.ViceBridge>();
+        builder.Services.AddSingleton<ViceMCP.ViceBridge.Responses.ResponseBuilder>();
+        builder.Services.AddSingleton<ViceMCP.ViceBridge.Services.Abstract.IPerformanceProfiler, EmptyPerformanceProfiler>();
+        builder.Services.AddSingleton<ViceMCP.ViceBridge.Services.Abstract.IMessagesHistory, SimpleMessagesHistory>();
+        builder.Services.AddSingleton<ViceMCP.ViceBridge.Services.Abstract.IViceBridge, ViceMCP.ViceBridge.Services.Implementation.ViceBridge>();
 
         builder.Services
             .AddMcpServer()

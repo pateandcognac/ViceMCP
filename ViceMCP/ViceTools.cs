@@ -3,11 +3,11 @@ using System.ComponentModel;
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using ModelContextProtocol.Server;
-using Righthand.ViceMonitor.Bridge;
-using Righthand.ViceMonitor.Bridge.Commands;
-using Righthand.ViceMonitor.Bridge.Responses;
-using Righthand.ViceMonitor.Bridge.Services.Abstract;
-using Righthand.ViceMonitor.Bridge.Shared;
+using ViceMCP.ViceBridge;
+using ViceMCP.ViceBridge.Commands;
+using ViceMCP.ViceBridge.Responses;
+using ViceMCP.ViceBridge.Services.Abstract;
+using ViceMCP.ViceBridge.Shared;
 
 namespace ViceMCP;
 
@@ -79,7 +79,7 @@ public class ViceTools
             .ToArray();
 
         // Create a ManagedBuffer from the data
-        using var buffer = Righthand.ViceMonitor.Bridge.BufferManager.GetBuffer((uint)data.Length);
+        using var buffer = ViceMCP.ViceBridge.BufferManager.GetBuffer((uint)data.Length);
         Array.Copy(data, buffer.Data, data.Length);
         
         var command = new MemorySetCommand(0, start, MemSpace.MainMemory, 0, buffer);
