@@ -302,16 +302,17 @@ namespace ViceMCP.ViceBridge.Services.Implementation
                 // Always check if VICE needs to be resumed after successful commands
                 if (response.ErrorCode == ErrorCode.OK)
                 {
-                    // Skip auto-resume check for certain commands that shouldn't trigger it
+                    // Skip for ExitCommand to avoid infinite loop
                     var commandType = pending.Command.GetType().Name;
-                    if (commandType == "ExitCommand" || 
-                        commandType == "PingCommand" ||
-                        commandType == "MemoryGetCommand") // Skip for reads used in jiffy clock check
+                    if (commandType == "ExitCommand")
                     {
-                        _logger.LogDebug("Skipping auto-resume check for {CommandType}", commandType);
+                        _logger.LogDebug("Skipping auto-resume check for ExitCommand");
                     }
                     else
                     {
+                        // Wait at least one jiffy (17ms) to ensure VICE has settled
+                        await Task.Delay(20, ct);
+                        
                         // Check if VICE is paused using jiffy clock
                         var isPaused = await IsVicePausedAsync(ct);
                         
