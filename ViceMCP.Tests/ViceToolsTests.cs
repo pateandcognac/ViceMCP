@@ -27,20 +27,21 @@ public class ViceToolsTests
     public async Task ReadMemory_Should_Return_Formatted_Bytes()
     {
         // Arrange
-        var expectedBytes = new byte[] { 0x08, 0x05, 0x0C, 0x0C, 0x0F };
-        var buffer = BufferManager.GetBuffer((uint)expectedBytes.Length);
-        Array.Clear(buffer.Data, 0, buffer.Data.Length);
-        Array.Copy(expectedBytes, buffer.Data, expectedBytes.Length);
-        
-        var memoryResponse = new MemoryGetResponse(0x02, ErrorCode.OK, buffer);
-        var commandResponse = new CommandResponse<MemoryGetResponse>(memoryResponse);
-        
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), It.IsAny<bool>()))
             .Callback((MemoryGetCommand cmd, bool resumeOnStopped) => 
             {
+                // Create response with fresh buffer to avoid pollution
+                var expectedBytes = new byte[] { 0x08, 0x05, 0x0C, 0x0C, 0x0F };
+                var buffer = BufferManager.GetBuffer((uint)expectedBytes.Length);
+                Array.Clear(buffer.Data, 0, buffer.Data.Length);
+                Array.Copy(expectedBytes, buffer.Data, expectedBytes.Length);
+                
+                var memoryResponse = new MemoryGetResponse(0x02, ErrorCode.OK, buffer);
+                var commandResponse = new CommandResponse<MemoryGetResponse>(memoryResponse);
+                
                 // Use reflection to set the response
                 var commandType = typeof(ViceCommand<MemoryGetResponse>);
                 var tcsField = commandType.GetField("tcs", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
@@ -63,8 +64,6 @@ public class ViceToolsTests
                 cmd.MemSpace == MemSpace.MainMemory &&
                 cmd.BankId == 0),
             false), Times.Once);
-        
-        buffer.Dispose();
     }
 
     [Fact]
@@ -83,7 +82,7 @@ public class ViceToolsTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemorySetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemorySetCommand>(), It.IsAny<bool>()))
             .Callback((MemorySetCommand cmd, bool resumeOnStopped) => 
             {
                 // Use reflection to set the response
@@ -106,7 +105,7 @@ public class ViceToolsTests
                 cmd.StartAddress == 0x0400 &&
                 cmd.MemSpace == MemSpace.MainMemory &&
                 cmd.BankId == 0),
-            false), Times.Once);
+            true), Times.Once);
     }
 
     [Fact]
@@ -217,7 +216,7 @@ public class ViceToolsTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), It.IsAny<bool>()))
             .Callback((MemoryGetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<MemoryGetResponse>);
@@ -241,7 +240,7 @@ public class ViceToolsTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), It.IsAny<bool>()))
             .Callback((MemoryGetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<MemoryGetResponse>);
@@ -265,7 +264,7 @@ public class ViceToolsTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemorySetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemorySetCommand>(), It.IsAny<bool>()))
             .Callback((MemorySetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<EmptyViceResponse>);

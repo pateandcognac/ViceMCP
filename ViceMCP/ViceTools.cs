@@ -91,9 +91,6 @@ public class ViceTools
             throw new InvalidOperationException($"Failed to write memory: {result.ErrorCode}");
         }
 
-        // Auto-resume execution after write
-        await AutoResumeAsync();
-        
         return $"Wrote {data.Length} bytes to ${start:X4}";
     }
     
@@ -120,20 +117,6 @@ public class ViceTools
         }
     }
     
-    private async Task AutoResumeAsync()
-    {
-        // Always try to resume after state-modifying operations
-        // This ensures VICE doesn't stay paused after memory/register writes
-        try
-        {
-            var exitCommand = new ExitCommand();
-            await _viceBridge.EnqueueCommand(exitCommand).Response;
-        }
-        catch
-        {
-            // Ignore errors - VICE might already be running
-        }
-    }
     
     [McpServerTool(Name = "get_registers"), Description("Gets CPU registers from VICE.")]
     public async Task<string> GetRegisters()
@@ -192,9 +175,6 @@ public class ViceTools
             throw new InvalidOperationException($"Failed to set register: {result.ErrorCode}");
         }
 
-        // Auto-resume execution after register set
-        await AutoResumeAsync();
-        
         return $"Set {registerName} to ${value:X4}";
     }
     
@@ -590,9 +570,6 @@ public class ViceTools
             throw new InvalidOperationException($"Failed to write to destination: {writeResult.ErrorCode}");
         }
         
-        // Auto-resume execution after copy
-        await AutoResumeAsync();
-        
         return $"Copied {length} bytes from ${source:X4} to ${dest:X4}";
     }
     
@@ -644,9 +621,6 @@ public class ViceTools
         {
             throw new InvalidOperationException($"Failed to fill memory: {result.ErrorCode}");
         }
-        
-        // Auto-resume execution after fill
-        await AutoResumeAsync();
         
         return $"Filled ${start:X4}-${end:X4} with pattern {string.Join(" ", patternBytes.Select(b => $"{b:X2}"))}";
     }
@@ -878,9 +852,6 @@ public class ViceTools
         {
             throw new InvalidOperationException($"Failed to load program: {result.ErrorCode}");
         }
-        
-        // Auto-resume execution after load
-        await AutoResumeAsync();
         
         var endAddress = loadAddress + dataLength - 1;
         return $"Loaded {Path.GetFileName(filePath)} ({dataLength} bytes) to ${loadAddress:X4}-${endAddress:X4}";

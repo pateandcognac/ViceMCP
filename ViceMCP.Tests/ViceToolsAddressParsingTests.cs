@@ -39,7 +39,7 @@ public class ViceToolsAddressParsingTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), It.IsAny<bool>()))
             .Callback((MemoryGetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<MemoryGetResponse>);
@@ -59,8 +59,6 @@ public class ViceToolsAddressParsingTests
                 cmd.StartAddress == 0xC000 && 
                 cmd.EndAddress == 0xC001),
             false), Times.Once);
-        
-        buffer.Dispose();
     }
 
     [Fact]
@@ -72,7 +70,7 @@ public class ViceToolsAddressParsingTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemorySetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemorySetCommand>(), It.IsAny<bool>()))
             .Callback((MemorySetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<EmptyViceResponse>);
@@ -89,7 +87,7 @@ public class ViceToolsAddressParsingTests
         result.Should().Be("Wrote 3 bytes to $D000");
         _viceBridgeMock.Verify(x => x.EnqueueCommand(
             It.Is<MemorySetCommand>(cmd => cmd.StartAddress == 0xD000),
-            false), Times.Once);
+            true), Times.Once);
     }
 
     [Fact]
@@ -102,7 +100,7 @@ public class ViceToolsAddressParsingTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<RegistersSetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<RegistersSetCommand>(), It.IsAny<bool>()))
             .Callback((RegistersSetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<RegistersResponse>);
@@ -121,7 +119,7 @@ public class ViceToolsAddressParsingTests
             It.Is<RegistersSetCommand>(cmd => 
                 cmd.Items.Length == 1 &&
                 cmd.Items[0].RegisterValue == 0xC000),
-            false), Times.Once);
+            true), Times.Once);
     }
 
     [Fact]
@@ -134,7 +132,7 @@ public class ViceToolsAddressParsingTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<CheckpointSetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<CheckpointSetCommand>(), It.IsAny<bool>()))
             .Callback((CheckpointSetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<CheckpointInfoResponse>);
@@ -166,19 +164,20 @@ public class ViceToolsAddressParsingTests
     public async Task ReadMemory_Should_Parse_Various_Hex_Formats(string input, ushort expected)
     {
         // Arrange
-        var buffer = BufferManager.GetBuffer(1);
-        Array.Clear(buffer.Data, 0, buffer.Data.Length);
-        buffer.Data[0] = 0x42;
-        
-        var memoryResponse = new MemoryGetResponse(0x02, ErrorCode.OK, buffer);
-        var commandResponse = new CommandResponse<MemoryGetResponse>(memoryResponse);
-        
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), It.IsAny<bool>()))
             .Callback((MemoryGetCommand cmd, bool resumeOnStopped) => 
             {
+                // Create response with fresh buffer to avoid pollution
+                var buffer = BufferManager.GetBuffer(1);
+                Array.Clear(buffer.Data, 0, buffer.Data.Length);
+                buffer.Data[0] = 0x42;
+                
+                var memoryResponse = new MemoryGetResponse(0x02, ErrorCode.OK, buffer);
+                var commandResponse = new CommandResponse<MemoryGetResponse>(memoryResponse);
+                
                 var commandType = typeof(ViceCommand<MemoryGetResponse>);
                 var tcsField = commandType.GetField("tcs", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
                 var tcs = (TaskCompletionSource<CommandResponse<MemoryGetResponse>>)tcsField!.GetValue(cmd)!;
@@ -195,7 +194,5 @@ public class ViceToolsAddressParsingTests
                 cmd.StartAddress == expected && 
                 cmd.EndAddress == expected),
             false), Times.Once);
-        
-        buffer.Dispose();
     }
 }

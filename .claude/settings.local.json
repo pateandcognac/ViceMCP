@@ -61,7 +61,8 @@
       "mcp__vicemcp__load_program",
       "mcp__vicemcp__delete_checkpoint",
       "mcp__vicemcp__quit_vice",
-      "mcp__vicemcp__set_register"
+      "mcp__vicemcp__set_register",
+      "Bash(dotnet clean:*)"
     ],
     "deny": []
   }

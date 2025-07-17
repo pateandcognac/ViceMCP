@@ -47,7 +47,7 @@ public class ViceToolsMemoryOperationsTests : IDisposable
         
         // Setup read command
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), It.IsAny<bool>()))
             .Callback((MemoryGetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<MemoryGetResponse>);
@@ -59,7 +59,7 @@ public class ViceToolsMemoryOperationsTests : IDisposable
             
         // Setup write command
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemorySetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemorySetCommand>(), It.IsAny<bool>()))
             .Callback((MemorySetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<EmptyViceResponse>);
@@ -84,7 +84,7 @@ public class ViceToolsMemoryOperationsTests : IDisposable
         _viceBridgeMock.Verify(x => x.EnqueueCommand(
             It.Is<MemorySetCommand>(cmd => 
                 cmd.StartAddress == 0xD000),
-            false), Times.Once);
+            true), Times.Once);
         
         sourceBuffer.Dispose();
     }
@@ -110,7 +110,7 @@ public class ViceToolsMemoryOperationsTests : IDisposable
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemorySetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemorySetCommand>(), It.IsAny<bool>()))
             .Callback((MemorySetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<EmptyViceResponse>);
@@ -136,7 +136,7 @@ public class ViceToolsMemoryOperationsTests : IDisposable
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemorySetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemorySetCommand>(), It.IsAny<bool>()))
             .Callback((MemorySetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<EmptyViceResponse>);
@@ -186,7 +186,7 @@ public class ViceToolsMemoryOperationsTests : IDisposable
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), It.IsAny<bool>()))
             .Callback((MemoryGetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<MemoryGetResponse>);
@@ -222,7 +222,7 @@ public class ViceToolsMemoryOperationsTests : IDisposable
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), It.IsAny<bool>()))
             .Callback((MemoryGetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<MemoryGetResponse>);
@@ -257,7 +257,7 @@ public class ViceToolsMemoryOperationsTests : IDisposable
         var responses = new Queue<byte[]>(new[] { data1, data2 });
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), It.IsAny<bool>()))
             .Returns((MemoryGetCommand cmd, bool resumeOnStopped) => 
             {
                 // Get the next data set from the queue
@@ -297,7 +297,7 @@ public class ViceToolsMemoryOperationsTests : IDisposable
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<MemoryGetCommand>(), It.IsAny<bool>()))
             .Returns((MemoryGetCommand cmd, bool resumeOnStopped) => 
             {
                 // Create a new buffer for each call with the same data

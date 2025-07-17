@@ -35,7 +35,7 @@ public class ViceToolsExtendedTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<RegistersSetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<RegistersSetCommand>(), It.IsAny<bool>()))
             .Callback((RegistersSetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<RegistersResponse>);
@@ -55,7 +55,7 @@ public class ViceToolsExtendedTests
                 cmd.Items.Length == 1 &&
                 cmd.Items[0].RegisterId == 0 &&
                 cmd.Items[0].RegisterValue == 0xFF),
-            false), Times.Once);
+            true), Times.Once);
     }
 
     [Fact]
@@ -81,7 +81,7 @@ public class ViceToolsExtendedTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<RegistersSetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<RegistersSetCommand>(), It.IsAny<bool>()))
             .Callback((RegistersSetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<RegistersResponse>);
@@ -109,7 +109,7 @@ public class ViceToolsExtendedTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<ExitCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<ExitCommand>(), It.IsAny<bool>()))
             .Callback((ExitCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<EmptyViceResponse>);
@@ -135,7 +135,7 @@ public class ViceToolsExtendedTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<ExitCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<ExitCommand>(), It.IsAny<bool>()))
             .Callback((ExitCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<EmptyViceResponse>);
@@ -163,7 +163,7 @@ public class ViceToolsExtendedTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<ResetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<ResetCommand>(), It.IsAny<bool>()))
             .Callback((ResetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<EmptyViceResponse>);
@@ -192,7 +192,7 @@ public class ViceToolsExtendedTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<ResetCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<ResetCommand>(), It.IsAny<bool>()))
             .Callback((ResetCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<EmptyViceResponse>);
@@ -233,7 +233,7 @@ public class ViceToolsExtendedTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<InfoCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<InfoCommand>(), It.IsAny<bool>()))
             .Callback((InfoCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<InfoResponse>);
@@ -259,7 +259,7 @@ public class ViceToolsExtendedTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<InfoCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<InfoCommand>(), It.IsAny<bool>()))
             .Callback((InfoCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<InfoResponse>);
@@ -293,7 +293,7 @@ public class ViceToolsExtendedTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<BanksAvailableCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<BanksAvailableCommand>(), It.IsAny<bool>()))
             .Callback((BanksAvailableCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<BanksAvailableResponse>);
@@ -321,7 +321,7 @@ public class ViceToolsExtendedTests
         _viceBridgeMock.Setup(x => x.Start(6502));
         
         _viceBridgeMock
-            .Setup(x => x.EnqueueCommand(It.IsAny<BanksAvailableCommand>(), false))
+            .Setup(x => x.EnqueueCommand(It.IsAny<BanksAvailableCommand>(), It.IsAny<bool>()))
             .Callback((BanksAvailableCommand cmd, bool resumeOnStopped) => 
             {
                 var commandType = typeof(ViceCommand<BanksAvailableResponse>);
