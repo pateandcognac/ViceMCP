@@ -78,7 +78,8 @@
       "Bash(done)",
       "Bash(dotnet run:*)",
       "Bash(true)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "mcp__vicemcp__execute_batch"
     ],
     "deny": []
   }

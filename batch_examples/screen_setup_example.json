@@ -1,0 +1,68 @@
+[
+  {
+    "command": "write_memory",
+    "parameters": {
+      "startHex": "d020",
+      "dataHex": "00"
+    },
+    "description": "Set border color to black"
+  },
+  {
+    "command": "write_memory",
+    "parameters": {
+      "startHex": "d021",
+      "dataHex": "06"
+    },
+    "description": "Set background color to blue"
+  },
+  {
+    "command": "write_memory",
+    "parameters": {
+      "startHex": "d022",
+      "dataHex": "0e"
+    },
+    "description": "Set multicolor 1 to light blue"
+  },
+  {
+    "command": "write_memory",
+    "parameters": {
+      "startHex": "d023",
+      "dataHex": "03"
+    },
+    "description": "Set multicolor 2 to cyan"
+  },
+  {
+    "command": "fill_memory",
+    "parameters": {
+      "startHex": "0400",
+      "endHex": "07e7",
+      "pattern": "20"
+    },
+    "description": "Clear screen with spaces"
+  },
+  {
+    "command": "fill_memory",
+    "parameters": {
+      "startHex": "d800",
+      "endHex": "dbe7",
+      "pattern": "01"
+    },
+    "description": "Set color RAM to white"
+  },
+  {
+    "command": "write_memory",
+    "parameters": {
+      "startHex": "0428",
+      "dataHex": "c8 c5 cc cc cf a0 d7 cf d2 cc c4 a1"
+    },
+    "description": "Write 'HELLO WORLD!' to screen"
+  },
+  {
+    "command": "write_memory",
+    "parameters": {
+      "startHex": "d848",
+      "dataHex": "0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e 0e"
+    },
+    "description": "Set text color to light blue"
+  }
+]

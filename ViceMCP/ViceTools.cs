@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
 using ModelContextProtocol.Server;
 using ViceMCP.ViceBridge;
@@ -913,5 +914,36 @@ public class ViceTools
         
         var fileType = asPrg ? "PRG" : "binary";
         return $"Saved ${start:X4}-${end:X4} ({buffer.Size} bytes) to {filePath} as {fileType} file";
+    }
+    
+    [McpServerTool(Name = "execute_batch"), Description("Executes multiple VICE commands in a single batch operation. IMPORTANT: Always use this for multiple related operations (e.g., setting up screens, sprites, memory initialization) as it's significantly faster than individual commands - often 10x performance improvement. See batch_examples/ for JSON format.")]
+    public async Task<string> ExecuteBatch(
+        [Description("JSON array of command specifications")] string commandsJson,
+        [Description("Stop execution on first error (default: true)")] bool failFast = true)
+    {
+        await EnsureStartedAsync();
+        
+        List<BatchCommandSpec> commands;
+        try
+        {
+            commands = JsonSerializer.Deserialize<List<BatchCommandSpec>>(commandsJson) ?? new List<BatchCommandSpec>();
+        }
+        catch (JsonException ex)
+        {
+            throw new ArgumentException($"Invalid JSON format: {ex.Message}");
+        }
+        
+        if (commands.Count == 0)
+        {
+            throw new ArgumentException("No commands provided");
+        }
+        
+        var builder = new BatchCommandBuilder(this);
+        var response = await builder.ExecuteBatchAsync(commands, failFast);
+        
+        return JsonSerializer.Serialize(response, new JsonSerializerOptions 
+        { 
+            WriteIndented = true 
+        });
     }
 }

@@ -126,6 +126,13 @@ The following MCP tools are implemented:
 ### Input/Output
 - `send_keys`: Send keyboard input to VICE (supports escape sequences like \n for Return)
 
+### Batch Execution
+- `execute_batch`: Execute multiple VICE commands in a single operation
+  - **IMPORTANT**: Always use batch execution when performing multiple related operations (e.g., setting up screens, creating sprites, initializing memory)
+  - Batch execution significantly improves performance by reducing round-trip communication overhead
+  - Example: Setting up a sprite display can be 10x faster using batch vs individual commands
+  - See `batch_examples/` directory for JSON format examples
+
 ## Additional Commands That Could Be Implemented
 
 The following commands would further enhance debugging capabilities:

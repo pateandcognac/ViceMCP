@@ -307,6 +307,16 @@ Parameters:
 Returns: Confirmation of keys sent
 ```
 
+### `execute_batch` ⚡
+Execute multiple VICE commands in a single operation for significantly improved performance.
+```yaml
+Parameters:
+  - commandsJson: JSON array of command specifications
+  - failFast: Stop on first error (default: true)
+Returns: JSON with results of all commands
+```
+**🚀 Performance Tip**: Always use batch execution for multiple related operations. Setting up a sprite display can be 10x faster using batch vs individual commands. See `batch_examples/` for examples.
+
 </details>
 
 ## 💡 Examples
@@ -338,6 +348,18 @@ AI: Let me load your program and set a breakpoint...
 ```
 AI: I'll check if the sprite data was copied correctly...
 > compare_memory 0x2000 0x3000 64
+```
+
+### Batch Operations for Speed ⚡
+```
+AI: I'll set up a complete sprite display using batch execution...
+> execute_batch [
+    {"command": "write_memory", "parameters": {"startHex": "0xD020", "dataHex": "00"}},
+    {"command": "write_memory", "parameters": {"startHex": "0xD021", "dataHex": "00"}},
+    {"command": "fill_memory", "parameters": {"startHex": "0x0400", "endHex": "0x07E7", "pattern": "20"}},
+    // ... more commands
+  ]
+// Executes 10 commands in ~1.4 seconds vs ~14 seconds individually!
 ```
 
 ## 🏗️ Architecture

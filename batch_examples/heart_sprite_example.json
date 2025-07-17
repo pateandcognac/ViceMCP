@@ -1,0 +1,83 @@
+[
+  {
+    "command": "write_memory",
+    "parameters": {
+      "startHex": "d020",
+      "dataHex": "00"
+    },
+    "description": "Set border color to black"
+  },
+  {
+    "command": "write_memory",
+    "parameters": {
+      "startHex": "d021",
+      "dataHex": "00"
+    },
+    "description": "Set background color to black"
+  },
+  {
+    "command": "fill_memory",
+    "parameters": {
+      "startHex": "0400",
+      "endHex": "07e7",
+      "pattern": "20"
+    },
+    "description": "Clear screen with spaces"
+  },
+  {
+    "command": "write_memory",
+    "parameters": {
+      "startHex": "07f8",
+      "dataHex": "60 78 7c 3e 3e 7c 78 60 00 00 00 00 00 00 00 00 78 fc fe 7f 7f fe fc 78 00 00 00 00 00 00 00 00 60 78 7c 3e 3e 7c 78 60 00 00 00 00 00 00 00 00"
+    },
+    "description": "Define heart sprite data"
+  },
+  {
+    "command": "write_memory",
+    "parameters": {
+      "startHex": "d015",
+      "dataHex": "01"
+    },
+    "description": "Enable sprite 0"
+  },
+  {
+    "command": "write_memory",
+    "parameters": {
+      "startHex": "d000",
+      "dataHex": "9c"
+    },
+    "description": "Set sprite 0 X position (low byte)"
+  },
+  {
+    "command": "write_memory",
+    "parameters": {
+      "startHex": "d001",
+      "dataHex": "7c"
+    },
+    "description": "Set sprite 0 Y position"
+  },
+  {
+    "command": "write_memory",
+    "parameters": {
+      "startHex": "d027",
+      "dataHex": "02"
+    },
+    "description": "Set sprite 0 color to red"
+  },
+  {
+    "command": "write_memory",
+    "parameters": {
+      "startHex": "d010",
+      "dataHex": "00"
+    },
+    "description": "Set sprite 0 X position (high bit)"
+  },
+  {
+    "command": "write_memory",
+    "parameters": {
+      "startHex": "07fe",
+      "dataHex": "fe"
+    },
+    "description": "Set sprite 0 pointer to sprite data"
+  }
+]
