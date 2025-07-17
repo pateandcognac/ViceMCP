@@ -1,0 +1,100 @@
+Summary
+  Generated on: 7/17/2025 - 11:43:38 AM
+  Coverage date: 7/17/2025 - 11:43:29 AM
+  Parser: Cobertura
+  Assemblies: 1
+  Classes: 78
+  Files: 51
+  Line coverage: 62.2%
+  Covered lines: 1004
+  Uncovered lines: 610
+  Coverable lines: 1614
+  Total lines: 3685
+  Branch coverage: 48.3% (231 of 478)
+  Covered branches: 231
+  Total branches: 478
+  Method coverage: 75.8% (207 of 273)
+  Full method coverage: 65.5% (179 of 273)
+  Covered methods: 207
+  Fully covered methods: 179
+  Total methods: 273
+
+ViceMCP                                                                62.2%
+  CommunicationData                                                       0%
+  System.IO.BinaryReaderExtension                                       100%
+  System.IO.BinaryWriterExtension                                       100%
+  System.SystemExtension                                               93.1%
+  ViceMCP.EmptyPerformanceProfiler                                        0%
+  ViceMCP.Program                                                         0%
+  ViceMCP.SimpleMessagesHistory                                           0%
+  ViceMCP.ViceBridge.BufferManager                                      100%
+  ViceMCP.ViceBridge.Commands.AdvanceInstructionCommand                 100%
+  ViceMCP.ViceBridge.Commands.AutoStartCommand                          100%
+  ViceMCP.ViceBridge.Commands.BanksAvailableCommand                     100%
+  ViceMCP.ViceBridge.Commands.CheckpointDeleteCommand                   100%
+  ViceMCP.ViceBridge.Commands.CheckpointGetCommand                      100%
+  ViceMCP.ViceBridge.Commands.CheckpointListCommand                     100%
+  ViceMCP.ViceBridge.Commands.CheckpointSetCommand                       60%
+  ViceMCP.ViceBridge.Commands.CheckpointToggleCommand                   100%
+  ViceMCP.ViceBridge.Commands.CommandResponse<T>                        100%
+  ViceMCP.ViceBridge.Commands.ConditionSetCommand                      88.2%
+  ViceMCP.ViceBridge.Commands.DisplayGetCommand                         100%
+  ViceMCP.ViceBridge.Commands.DumpCommand                              89.4%
+  ViceMCP.ViceBridge.Commands.ExecuteUntilReturnCommand                 100%
+  ViceMCP.ViceBridge.Commands.ExitCommand                               100%
+  ViceMCP.ViceBridge.Commands.InfoCommand                               100%
+  ViceMCP.ViceBridge.Commands.KeyboardFeedCommand                      84.6%
+  ViceMCP.ViceBridge.Commands.MemoryGetCommand                          100%
+  ViceMCP.ViceBridge.Commands.MemorySetCommand                           80%
+  ViceMCP.ViceBridge.Commands.ParameterlessCommand<T>                   100%
+  ViceMCP.ViceBridge.Commands.PingCommand                               100%
+  ViceMCP.ViceBridge.Commands.QuitCommand                               100%
+  ViceMCP.ViceBridge.Commands.RegistersAvailableCommand                 100%
+  ViceMCP.ViceBridge.Commands.RegistersGetCommand                        20%
+  ViceMCP.ViceBridge.Commands.RegistersSetCommand                       100%
+  ViceMCP.ViceBridge.Commands.ResetCommand                              100%
+  ViceMCP.ViceBridge.Commands.ResourceGetCommand                       84.6%
+  ViceMCP.ViceBridge.Commands.ResourceSetCommand                          0%
+  ViceMCP.ViceBridge.Commands.UndumpCommand                            84.6%
+  ViceMCP.ViceBridge.Commands.ViceCommand<T>                            100%
+  ViceMCP.ViceBridge.ConnectedChangedEventArgs                          100%
+  ViceMCP.ViceBridge.Exceptions.ResumeOnStoppedTimeoutException         100%
+  ViceMCP.ViceBridge.Exceptions.SocketDisconnectedException             100%
+  ViceMCP.ViceBridge.ManagedBuffer                                      100%
+  ViceMCP.ViceBridge.Responses.AutoStartResponse                        100%
+  ViceMCP.ViceBridge.Responses.BankItem                                 100%
+  ViceMCP.ViceBridge.Responses.BanksAvailableResponse                   100%
+  ViceMCP.ViceBridge.Responses.CheckpointInfoResponse                   100%
+  ViceMCP.ViceBridge.Responses.CheckpointListResponse                   100%
+  ViceMCP.ViceBridge.Responses.DisplayGetResponse                       100%
+  ViceMCP.ViceBridge.Responses.EmptyViceResponse                        100%
+  ViceMCP.ViceBridge.Responses.FullRegisterItem                         100%
+  ViceMCP.ViceBridge.Responses.InfoResponse                             100%
+  ViceMCP.ViceBridge.Responses.JamResponse                              100%
+  ViceMCP.ViceBridge.Responses.MemoryGetResponse                        100%
+  ViceMCP.ViceBridge.Responses.RegistersAvailableResponse               100%
+  ViceMCP.ViceBridge.Responses.RegistersResponse                        100%
+  ViceMCP.ViceBridge.Responses.ResourceGetResponse                      100%
+  ViceMCP.ViceBridge.Responses.ResponseBuilder                         14.8%
+  ViceMCP.ViceBridge.Responses.ResumedResponse                          100%
+  ViceMCP.ViceBridge.Responses.StoppedResponse                          100%
+  ViceMCP.ViceBridge.Responses.UndumpResponse                           100%
+  ViceMCP.ViceBridge.Responses.ViceResponse                             100%
+  ViceMCP.ViceBridge.Services.Abstract.CommandCompletedEvent              0%
+  ViceMCP.ViceBridge.Services.Abstract.CommandSentEvent                 100%
+  ViceMCP.ViceBridge.Services.Abstract.DataAvailableEvent                 0%
+  ViceMCP.ViceBridge.Services.Abstract.PerformanceEvent                 100%
+  ViceMCP.ViceBridge.Services.Abstract.RawSendEvent                       0%
+  ViceMCP.ViceBridge.Services.Abstract.ResponseReadEvent                  0%
+  ViceMCP.ViceBridge.Services.Abstract.StartListeningEvent                0%
+  ViceMCP.ViceBridge.Services.Abstract.TraceEvent                         0%
+  ViceMCP.ViceBridge.Services.Implementation.NullMessagesHistory          0%
+  ViceMCP.ViceBridge.Services.Implementation.NullPerformanceProfiler      0%
+  ViceMCP.ViceBridge.Services.Implementation.PerformanceProfiler          0%
+  ViceMCP.ViceBridge.Services.Implementation.ViceBridge                78.6%
+  ViceMCP.ViceBridge.Shared.IntegerResource                             100%
+  ViceMCP.ViceBridge.Shared.RegisterItem                                100%
+  ViceMCP.ViceBridge.Shared.StringResource                              100%
+  ViceMCP.ViceBridge.ViceResponseEventArgs                                0%
+  ViceMCP.ViceConfiguration                                             4.2%
+  ViceMCP.ViceTools                                                    69.3%

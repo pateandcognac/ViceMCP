@@ -303,6 +303,7 @@ namespace ViceMCP.ViceBridge.Services.Implementation
                 // Handle auto-resume if needed
                 if (pending.ResumeOnStopped && response.ErrorCode == ErrorCode.OK)
                 {
+                    _logger.LogDebug("Auto-resume: Sending exit command after successful {CommandType}", pending.Command.GetType().Name);
                     // Simply send an exit command to ensure VICE is running
                     // This is simpler than trying to detect if it's actually stopped
                     var exitCommand = new ExitCommand();
@@ -310,7 +311,12 @@ namespace ViceMCP.ViceBridge.Services.Implementation
                     await SendCommandAsync(_socket!, _currentRequestId, exitCommand, ct);
                     var exitResponse = await WaitForResponseAsync(_currentRequestId, ct);
 
-                    _logger.LogDebug("Sent resume command with result: {Result}", exitResponse.ErrorCode);
+                    _logger.LogDebug("Auto-resume result: {Result} for exit command", exitResponse.ErrorCode);
+                }
+                else if (pending.ResumeOnStopped)
+                {
+                    _logger.LogDebug("Auto-resume skipped: Command {CommandType} returned {ErrorCode}", 
+                        pending.Command.GetType().Name, response.ErrorCode);
                 }
 
                 _currentRequestId++;
