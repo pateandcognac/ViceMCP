@@ -9,7 +9,6 @@ WORKDIR /src
 COPY ["ViceMCP.sln", "./"]
 COPY ["ViceMCP/ViceMCP.csproj", "ViceMCP/"]
 COPY ["ViceMCP.Tests/ViceMCP.Tests.csproj", "ViceMCP.Tests/"]
-COPY ["vice-bridge-net/source/ViceMonitor.Bridge/Righthand.ViceMonitor.Bridge/Righthand.ViceMonitor.Bridge.csproj", "vice-bridge-net/source/ViceMonitor.Bridge/Righthand.ViceMonitor.Bridge/"]
 
 # Restore dependencies
 RUN dotnet restore "ViceMCP/ViceMCP.csproj"
