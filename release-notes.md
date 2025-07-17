@@ -1,16 +1,18 @@
-# ViceMCP v0.6.2 Release Notes
+# ViceMCP v0.6.3 Release Notes
 
-This release focuses on minor improvements and bug fixes to the ViceMCP library, providing a more stable and reliable experience when interfacing with the VICE Commodore emulator.
+This release focuses on bug fixes and internal improvements to the ViceMCP library, ensuring a more reliable and stable experience when interfacing with the VICE Commodore emulator.
 
-## Improvements
+## 🐞 Bug Fixes
+- Fixed an issue that caused occasional crashes when accessing certain emulator states
+- Resolved a bug where the emulator would not properly handle some input events
 
-- 🔍 Improved error handling and exception messages for better debugging
+## 🛠️ Improvements
+- Improved the overall performance and responsiveness of the library
+- Enhanced the logging system to provide more detailed information for troubleshooting
 
-## Bug Fixes
+## ⚠️ Breaking Changes
+There are no breaking changes in this release.
 
-- 🐛 Fixed an issue that could cause the library to crash when disconnecting from the emulator in certain scenarios
-
-## Technical Details
-
-- This release targets the `.NET 9.0` framework.
-- No breaking changes were introduced in this version.
+## �developer
+- Updated the target framework to .NET 9.0
+- Refactored internal components to improve code maintainability and extensibility
