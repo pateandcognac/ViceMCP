@@ -316,9 +316,10 @@ jobs:
           - os: windows-latest
             rid: win-x64
             artifact: vicemcp-windows-x64
-          - os: windows-11-arm
-            rid: win-arm64
-            artifact: vicemcp-windows-arm64
+          # Windows ARM64 - commented out until GitHub runners are available for this repo
+          # - os: windows-11-arm
+          #   rid: win-arm64
+          #   artifact: vicemcp-windows-arm64
           - os: macos-latest
             rid: osx-x64
             artifact: vicemcp-macos-x64

@@ -57,7 +57,6 @@ Download the latest release for your platform from the [releases page](https://g
 - `vicemcp-linux-x64` - Linux x64 native executable
 - `vicemcp-linux-arm64` - Linux ARM64 native executable  
 - `vicemcp-windows-x64` - Windows x64 native executable
-- `vicemcp-windows-arm64` - Windows ARM64 native executable (Surface Pro X, etc.)
 - `vicemcp-macos-x64` - macOS Intel native executable
 - `vicemcp-macos-arm64` - macOS Apple Silicon native executable
 
