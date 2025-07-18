@@ -80,7 +80,8 @@
       "Bash(true)",
       "Bash(mv:*)",
       "mcp__vicemcp__execute_batch",
-      "Bash(dotnet publish:*)"
+      "Bash(dotnet publish:*)",
+      "Bash(docker build:*)"
     ],
     "deny": []
   }

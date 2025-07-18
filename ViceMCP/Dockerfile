@@ -18,11 +18,11 @@ COPY . .
 
 # Build the application
 WORKDIR "/src/ViceMCP"
-RUN dotnet build "./ViceMCP.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./ViceMCP.csproj" -c $BUILD_CONFIGURATION -o /app/build /p:PublishAot=false
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./ViceMCP.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./ViceMCP.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false /p:PublishAot=false
 
 FROM base AS final
 WORKDIR /app
