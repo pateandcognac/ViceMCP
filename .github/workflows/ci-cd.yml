@@ -310,9 +310,10 @@ jobs:
           - os: ubuntu-latest
             rid: linux-x64
             artifact: vicemcp-linux-x64
-          - os: ubuntu-latest
-            rid: linux-arm64
-            artifact: vicemcp-linux-arm64
+          # Linux ARM64 - needs proper cross-compilation setup
+          # - os: ubuntu-latest
+          #   rid: linux-arm64
+          #   artifact: vicemcp-linux-arm64
           - os: windows-latest
             rid: win-x64
             artifact: vicemcp-windows-x64

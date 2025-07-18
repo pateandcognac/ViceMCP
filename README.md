@@ -55,7 +55,6 @@ Download the latest release for your platform from the [releases page](https://g
 
 **Native AOT Builds Available!** 🚀 No .NET runtime required - just download and run:
 - `vicemcp-linux-x64` - Linux x64 native executable
-- `vicemcp-linux-arm64` - Linux ARM64 native executable  
 - `vicemcp-windows-x64` - Windows x64 native executable
 - `vicemcp-macos-x64` - macOS Intel native executable
 - `vicemcp-macos-arm64` - macOS Apple Silicon native executable
