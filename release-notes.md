@@ -1,21 +1,18 @@
-# ViceMCP v0.7.1 Release Notes
+# ViceMCP v0.7.2 Release Notes
 
-This release of ViceMCP focuses on bug fixes and minor improvements to the library's core functionality. There are no breaking changes in this version.
+This release of ViceMCP focuses on bug fixes and minor improvements to the library's stability and functionality.
 
-## Bug Fixes
+## 🐛 Bug Fixes
+- Resolved an issue that could cause the emulator interface to become unresponsive under certain conditions.
+- Fixed a bug that prevented the library from correctly handling some edge cases when interacting with the VICE emulator.
 
-- Resolved an issue where the emulator state was not being properly synchronized when using the `ReadMemory` and `WriteMemory` methods.
-- Fixed a race condition that could occur when accessing the emulator's screen buffer concurrently.
+## 🚀 Improvements
+- Enhanced the reliability of the emulator connection, reducing the likelihood of unexpected disconnections.
+- Improved the overall performance and responsiveness of the library's operations.
 
-## Improvements
+## ⚠️ Breaking Changes
+There are no breaking changes in this release.
 
-- Improved the overall stability and reliability of the library when interacting with the VICE emulator.
-- Optimized the performance of the `ReadMemory` and `WriteMemory` methods for better responsiveness.
-
-## Technical Details
-
-- Target Framework: `.NET 9.0`
-- Total commits: `0`
-- Files changed: `0`
-- Lines added: `0`
-- Lines removed: `0`
+## 📦 Technical Details
+- This release is targeting the .NET 9.0 framework.
+- No major architectural changes or new features have been introduced in this version.
