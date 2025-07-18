@@ -79,7 +79,8 @@
       "Bash(dotnet run:*)",
       "Bash(true)",
       "Bash(mv:*)",
-      "mcp__vicemcp__execute_batch"
+      "mcp__vicemcp__execute_batch",
+      "Bash(dotnet publish:*)"
     ],
     "deny": []
   }

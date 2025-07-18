@@ -16,6 +16,12 @@
         <RepositoryUrl>https://github.com/barryw/ViceMCP</RepositoryUrl>
         <PackageTags>mcp;vice;commodore;c64;debugging;emulator</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        
+        <!-- AOT Configuration -->
+        <PublishAot>true</PublishAot>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <IlcOptimizationPreference>Speed</IlcOptimizationPreference>
+        <StripSymbols>true</StripSymbols>
     </PropertyGroup>
 
     <ItemGroup>

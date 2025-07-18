@@ -26,7 +26,7 @@ ViceMCP bridges the gap between modern AI assistants and retro computing by expo
 - 🔍 **Memory Operations** - Read, write, search, and analyze memory in real-time
 - 🐛 **Advanced Debugging** - Set breakpoints, step through code, examine registers
 - ⚡ **Batch Commands** - Execute multiple operations in one shot for 10x performance
-- 📦 **Zero Dependencies** - Self-contained MCP server with embedded VICE bridge
+- 📦 **Zero Dependencies** - Native AOT builds available - no .NET runtime needed!
 - 🚀 **Cross-Platform** - Works on Windows, macOS, and Linux
 - 🎮 **Multi-Machine Support** - C64, C128, VIC-20, PET, Plus/4, and more
 
@@ -53,10 +53,62 @@ Check out the [batch_examples/](batch_examples/) directory for ready-to-use JSON
 
 Download the latest release for your platform from the [releases page](https://github.com/barryw/ViceMCP/releases/latest).
 
+**Native AOT Builds Available!** 🚀 No .NET runtime required - just download and run:
+- `vicemcp-linux-x64` - Linux x64 native executable
+- `vicemcp-linux-arm64` - Linux ARM64 native executable  
+- `vicemcp-windows-x64` - Windows x64 native executable
+- `vicemcp-windows-arm64` - Windows ARM64 native executable (Surface Pro X, etc.)
+- `vicemcp-macos-x64` - macOS Intel native executable
+- `vicemcp-macos-arm64` - macOS Apple Silicon native executable
+
 ### 🐳 Docker
 
+#### Quick Test
 ```bash
 docker run -it ghcr.io/barryw/vicemcp:latest
+```
+
+#### Using with Claude Code CLI
+```bash
+# Using Docker image directly
+claude mcp add vicemcp "docker run -i --rm ghcr.io/barryw/vicemcp:latest"
+
+# With VICE binary path mounted (if you have VICE installed locally)
+claude mcp add vicemcp "docker run -i --rm -v /usr/local/bin:/vice:ro ghcr.io/barryw/vicemcp:latest" --env VICE_BIN_PATH=/vice
+```
+
+#### Manual Configuration for Docker
+```json
+{
+  "mcpServers": {
+    "vicemcp": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "ghcr.io/barryw/vicemcp:latest"],
+      "env": {
+        "VICE_MONITOR_PORT": "6502"
+      }
+    }
+  }
+}
+```
+
+#### Docker Compose Setup
+```yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  vicemcp:
+    image: ghcr.io/barryw/vicemcp:latest
+    stdin_open: true
+    tty: true
+    environment:
+      - VICE_MONITOR_PORT=6502
+      - VICE_STARTUP_TIMEOUT=5000
+```
+
+Then configure with:
+```bash
+claude mcp add vicemcp "docker-compose run --rm vicemcp"
 ```
 
 ### 🔧 Build from Source
@@ -85,6 +137,9 @@ claude mcp add vicemcp ~/Downloads/vicemcp-osx-arm64/ViceMCP
 
 # Or if you built from source
 claude mcp add vicemcp ~/RiderProjects/ViceMCP/ViceMCP/bin/Release/net9.0/ViceMCP
+
+# Or using Docker (no installation needed!)
+claude mcp add vicemcp "docker run -i --rm ghcr.io/barryw/vicemcp:latest"
 ```
 
 With VICE path configured (if not in system PATH):
