@@ -4,4 +4,6 @@
     build:
       context: .
       dockerfile: ViceMCP/Dockerfile
+    network_mode: host
+    stdin_open: true
 

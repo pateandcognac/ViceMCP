@@ -1,10 +1,10 @@
-# CLAUDE.md
+# GEMINI.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Gemini when working with code in this repository.
 
 ## Project Overview
 
-ViceMCP is a Model Context Protocol (MCP) server that enables developers of Commodore 8-bit software to use LLMs (like Claude) to interact with the VICE emulator. It exposes VICE's binary monitor protocol through MCP tools, allowing AI assistants to read and write memory in running Commodore 64, VIC-20, PET, and other 8-bit Commodore computer emulations.
+ViceMCP is a Model Context Protocol (MCP) server that enables developers of Commodore 8-bit software to use LLMs (like Gemini!) to interact with the VICE emulator. It exposes VICE's binary monitor protocol through MCP tools, allowing AI assistants to read and write memory in running Commodore 64, VIC-20, PET, and other 8-bit Commodore computer emulations.
 
 This bridge between modern AI tools and retro computing enables:
 - Automated debugging of 6502 assembly code

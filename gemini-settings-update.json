@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "vicemcp": {
+      "command": "docker",
+      "args": ["attach", "vicemcp_vicemcp_1"],
+      "cwd": "/home/mark/src/ViceMCP",
+      "timeout": 30000
+    }
+  }
+}
